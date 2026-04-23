@@ -97,6 +97,7 @@ registerSW();
 
 const input = document.getElementById("url");
 const form = document.getElementById("preview-form");
+const examples = document.getElementById("examples");
 
 form.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -107,4 +108,11 @@ form.addEventListener("submit", (event) => {
     } catch (error) {
         alert(error.message);
     }
+});
+
+examples.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-url]");
+    if (!button) return;
+    input.value = button.dataset.url;
+    input.focus();
 });

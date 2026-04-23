@@ -22,7 +22,6 @@ async function handleSameOriginRequest(request, url) {
     // Split: owner/repo/(commit|refs/heads|refs/tags)/...
     const parts = path.split("/");
     if (parts.length < 4) {
-        // return new Response("Invalid URL", { status: 400 });
         // If length < 4, it should be a request to the app itself, so we don't modify it
         return fetch(request);
     }

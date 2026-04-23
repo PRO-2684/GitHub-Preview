@@ -10,11 +10,11 @@ Preview static assets like HTML on GitHub.
 Here's a few examples:
 
 - [Bootstrap's page](https://pro-2684.github.io/GitHub-Preview/twbs/bootstrap/0d0ca30f5db73cceb456597c78b3c8750263c2d5/2.3.2/index.html)
-    - [Source code](https://github.com/twbs/bootstrap/blob/0d0ca30f5db73cceb456597c78b3c8750263c2d5/2.3.2/index.html)
-    - [GitHub raw](https://raw.githubusercontent.com/twbs/bootstrap/0d0ca30f5db73cceb456597c78b3c8750263c2d5/2.3.2/index.html)
+    - [Blob](https://github.com/twbs/bootstrap/blob/0d0ca30f5db73cceb456597c78b3c8750263c2d5/2.3.2/index.html)
+    - [Raw](https://raw.githubusercontent.com/twbs/bootstrap/0d0ca30f5db73cceb456597c78b3c8750263c2d5/2.3.2/index.html)
 - [Example fetch](https://pro-2684.github.io/GitHub-Preview/PRO-2684/GitHub-Preview/raw/refs/heads/main/examples/fetch/index.html)
-    - [Source code](https://github.com/PRO-2684/GitHub-Preview/blob/main/examples/fetch/index.html)
-    - [GitHub raw](https://raw.githubusercontent.com/PRO-2684/GitHub-Preview/refs/heads/main/examples/fetch/index.html)
+    - [Blob](https://github.com/PRO-2684/GitHub-Preview/blob/main/examples/fetch/index.html)
+    - [Raw](https://raw.githubusercontent.com/PRO-2684/GitHub-Preview/refs/heads/main/examples/fetch/index.html)
 
 ## How it works
 

@@ -13,6 +13,7 @@
 
 body,
 h1,
+h2,
 p {
     margin: 0;
 }
@@ -35,7 +36,8 @@ body {
 }
 
 .field,
-.button {
+.button,
+.example {
     width: 100%;
     padding: 0.75rem 1rem;
     border: 1px solid var(--color-border);
@@ -43,14 +45,23 @@ body {
     font: inherit;
 }
 
-.field {
+.field,
+.example {
     color: inherit;
     background: transparent;
 }
 
+.button,
+.example {
+    cursor: pointer;
+}
+
 .button {
     background: var(--color-accent);
-    cursor: pointer;
+}
+
+.example {
+    text-align: left;
 }
 
 .hint {
