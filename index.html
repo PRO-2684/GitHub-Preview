@@ -2,20 +2,29 @@
 <html>
     <head>
         <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>GitHub Preview</title>
         <link rel="stylesheet" href="./style.css" />
     </head>
     <body>
-        <h1>GitHub Preview</h1>
+        <main class="app stack">
+            <div class="stack">
+                <h1>GitHub Preview</h1>
+                <p class="hint">Paste a raw GitHub URL or a GitHub blob URL.</p>
+            </div>
 
-        <input
-            id="url"
-            type="url"
-            style="width: 80%"
-            placeholder="https://raw.githubusercontent.com/user/repo/commit-hash/path/to/index.html"
-            autofocus
-        />
-        <button id="preview">Preview</button>
+            <form id="preview-form" class="stack">
+                <input
+                    id="url"
+                    class="field"
+                    type="url"
+                    placeholder="https://raw.githubusercontent.com/user/repo/refs/heads/main/path/to/index.html"
+                    autofocus
+                    required
+                />
+                <button class="button" type="submit">Preview</button>
+            </form>
+        </main>
 
         <script src="./app.js"></script>
     </body>

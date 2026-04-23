@@ -19,7 +19,7 @@ async function handleSameOriginRequest(request, url) {
     // Strip prefix
     const path = url.pathname.replace(PREFIX, "");
 
-    // Split: owner/repo/commit/...
+    // Split: owner/repo/(commit|refs/heads|refs/tags)/...
     const parts = path.split("/");
     if (parts.length < 4) {
         // return new Response("Invalid URL", { status: 400 });
@@ -27,8 +27,8 @@ async function handleSameOriginRequest(request, url) {
         return fetch(request);
     }
 
-    const [owner, repo, ref, ...rest] = parts;
-    const rawUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${ref}/${rest.join("/")}`;
+    const [owner, repo, ...rest] = parts;
+    const rawUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${rest.join("/")}`;
 
     // Fetch original
     const res = await fetch(rawUrl);
