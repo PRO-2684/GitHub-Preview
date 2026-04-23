@@ -14,13 +14,46 @@ Here's a few examples:
     - [GitHub raw](https://raw.githubusercontent.com/twbs/bootstrap/0d0ca30f5db73cceb456597c78b3c8750263c2d5/2.3.2/index.html)
 - TODO
 
+## How it works
+
+This project uses a Service Worker as a client-side proxy:
+
+1. Requests under `GitHub-Preview/...` are intercepted by the Service Worker.
+2. The path is mapped to `raw.githubusercontent.com/...`.
+3. The Service Worker fetches the original content.
+4. It fixes `Content-Type` (e.g. `text/plain` → `text/html`)
+5. Returns the modified response to the browser.
+
+Because all requests (including those triggered by scripts like `fetch("./data.json")`) go through the Service Worker, runtime resource loading works transparently.
+
+## Comparison
+
+Key differences between this project and other popular solutions:
+
+| Approach | Description |
+|----------|------------|
+| This project | Intercepts **all network requests** via Service Worker and remaps them |
+| [raw.githack.com](https://raw.githack.com/) | Uses a **server-side proxy** to serve corrected responses |
+| [htmlpreview](https://htmlpreview.github.io/) | Rewrites **HTML content only**, cannot intercept runtime behavior |
+
+Detailed feature comparison:
+
+| Feature | This project | [raw.githack.com](https://raw.githack.com/) | [htmlpreview](https://htmlpreview.github.io/) |
+|--------|-------------|------------------|-------------|
+| Architecture | Client-side (Service Worker) | Server-side proxy | Client + Server (optional proxy fallback) |
+| Mechanism | Network interception | Server Proxy | HTML rewrite |
+| Backend-free | 🟢 | 🔴 | 🟡 (proxy fallback) |
+| Fix `Content-Type` | 🟢 | 🟢 | 🟢 |
+| Static assets (`<img>`, `<script>`, `<link>`) | 🟢 | 🟢 | 🟢 |
+| Runtime requests (`fetch`, XHR) | 🟢 | 🟢 | 🔴 |
+| Dynamic resources | 🟢 | 🟢 | 🔴 |
+| Relative path handling | 🟢 (request remapping) | 🟢 | 🟡 (`<base>` + rewriting) |
+| Reliability | High | Depends on service | High |
+
 ## TODO
 
 - [ ] Better MIME type detection (currently only based on file extension)
 - [ ] Better landing page
-    - [ ] Clickable Examples
-    - [ ] Explanation of how to use
-    - [ ] Technical details of how it works
 - [ ] Asset caching and offline support
     - [ ] Cache assets of this app
     - [ ] Cache assets of the previewed page (user control?)
