@@ -13,3 +13,14 @@ Here's a few examples:
     - [Source code](https://github.com/twbs/bootstrap/blob/0d0ca30f5db73cceb456597c78b3c8750263c2d5/2.3.2/index.html)
     - [GitHub raw](https://raw.githubusercontent.com/twbs/bootstrap/0d0ca30f5db73cceb456597c78b3c8750263c2d5/2.3.2/index.html)
 - TODO
+
+## TODO
+
+- [ ] Better MIME type detection (currently only based on file extension)
+- [ ] Better landing page
+    - [ ] Clickable Examples
+    - [ ] Explanation of how to use
+    - [ ] Technical details of how it works
+- [ ] Asset caching and offline support
+    - [ ] Cache assets of this app
+    - [ ] Cache assets of the previewed page (user control?)
