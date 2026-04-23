@@ -1,0 +1,54 @@
+const ORIGIN = self.location.origin;
+const PREFIX = self.location.pathname.split("/").slice(0, -1).join("/") + "/";
+
+self.addEventListener("install", () => {
+    self.skipWaiting();
+});
+
+self.addEventListener("activate", (event) => {
+    event.waitUntil(self.clients.claim());
+});
+
+self.addEventListener("fetch", (event) => {
+    const url = new URL(event.request.url);
+    if (url.origin !== ORIGIN) return; // Only handle same-origin requests
+    event.respondWith(handleSameOriginRequest(event.request, url));
+});
+
+async function handleSameOriginRequest(request, url) {
+    // Strip prefix
+    const path = url.pathname.replace(PREFIX, "");
+
+    // Split: owner/repo/commit/...
+    const parts = path.split("/");
+    if (parts.length < 4) {
+        // return new Response("Invalid URL", { status: 400 });
+        // If length < 4, it should be a request to the app itself, so we don't modify it
+        return fetch(request);
+    }
+
+    const [owner, repo, ref, ...rest] = parts;
+    const rawUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${ref}/${rest.join("/")}`;
+
+    // Fetch original
+    const res = await fetch(rawUrl);
+    if (!res.ok) return res;
+
+    // Return with inferred content type
+    return new Response(res.body, {
+        headers: {
+            "Content-Type": inferType(rest[rest.length - 1]),
+        },
+    });
+}
+
+function inferType(path) {
+    // TODO: better MIME inference
+    if (path.endsWith(".html")) return "text/html";
+    if (path.endsWith(".js")) return "application/javascript";
+    if (path.endsWith(".json")) return "application/json";
+    if (path.endsWith(".css")) return "text/css";
+    if (path.endsWith(".png")) return "image/png";
+    if (path.endsWith(".jpg") || path.endsWith(".jpeg")) return "image/jpeg";
+    return "text/plain";
+}
