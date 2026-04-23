@@ -1,11 +1,11 @@
 # GitHub-Preview
 
-Preview static assets like HTML on GitHub.
+Preview HTML files directly from GitHub without cloning.
 
 ## Usage
 
 1. Visit [GitHub-Preview](https://pro-2684.github.io/GitHub-Preview/) once. (Registers [service worker](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorker))
-2. Replace `https://raw.githubusercontent.com/` with `https://pro-2684.github.io/GitHub-Preview/` and visit the URL. Alternatively, paste the link in the input box on the homepage and submit.
+2. Paste the raw/blob link in the input box on the homepage and submit. Alternatively, replace `https://raw.githubusercontent.com/` with `https://pro-2684.github.io/GitHub-Preview/` and visit the URL.
 
 Here's a few examples:
 
@@ -52,10 +52,14 @@ Detailed feature comparison:
 | Relative path handling | 🟢 (request remapping) | 🟢 | 🟡 (`<base>` + rewriting) |
 | Reliability | High | Depends on service | High |
 
+## Credits
+
+- [htmlpreview](https://htmlpreview.github.io/)
+
 ## TODO
 
 - [ ] Better MIME type detection (currently only based on file extension)
-- [ ] Better landing page
+- [x] Better landing page
 - [ ] Asset caching and offline support
     - [ ] Cache assets of this app
     - [ ] Cache assets of the previewed page (user control?)

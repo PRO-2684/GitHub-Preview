@@ -27,7 +27,7 @@ body {
 .app {
     width: min(100%, 720px);
     margin: 0 auto;
-    padding: 3rem 1rem;
+    padding: 1em;
 }
 
 .stack {
@@ -64,6 +64,11 @@ body {
     text-align: left;
 }
 
-.hint {
+footer {
     color: var(--color-text-muted);
+    text-align: center;
+
+    a {
+        color: inherit;
+    }
 }

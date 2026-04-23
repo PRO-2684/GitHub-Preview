@@ -26,7 +26,9 @@ class GitHubLink {
             return GitHubLink.parseBlob(parts);
         }
 
-        throw new Error("Only raw.githubusercontent.com and github.com/blob links are supported");
+        throw new Error(
+            "Only raw.githubusercontent.com and github.com/blob links are supported",
+        );
     }
 
     static parseRaw(parts) {
@@ -35,7 +37,8 @@ class GitHubLink {
         const [user, repo, third, fourth, fifth, ...rest] = parts;
 
         if (third === "refs" && (fourth === "heads" || fourth === "tags")) {
-            if (!fifth || rest.length === 0) throw new Error("Invalid raw GitHub URL");
+            if (!fifth || rest.length === 0)
+                throw new Error("Invalid raw GitHub URL");
 
             return new GitHubLink({
                 user,
@@ -82,11 +85,15 @@ class GitHubLink {
         const base = [this.user, this.repo];
 
         if (this.ref.type === "branch") {
-            return [...base, "refs", "heads", this.ref.value, this.path].join("/");
+            return [...base, "refs", "heads", this.ref.value, this.path].join(
+                "/",
+            );
         }
 
         if (this.ref.type === "tag") {
-            return [...base, "refs", "tags", this.ref.value, this.path].join("/");
+            return [...base, "refs", "tags", this.ref.value, this.path].join(
+                "/",
+            );
         }
 
         return [...base, this.ref.value, this.path].join("/");
@@ -115,4 +122,21 @@ examples.addEventListener("click", (event) => {
     if (!button) return;
     input.value = button.dataset.url;
     input.focus();
+});
+
+document.addEventListener("keydown", (event) => {
+    // Focus on Enter
+    if (event.key === "Enter" && document.activeElement !== input) {
+        input.focus();
+        event.preventDefault();
+    }
+    // Clear / blur on Escape
+    if (event.key === "Escape" && document.activeElement === input) {
+        if (input.value) {
+            input.value = "";
+        } else {
+            input.blur();
+        }
+        event.preventDefault();
+    }
 });

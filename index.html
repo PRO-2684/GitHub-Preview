@@ -10,7 +10,7 @@
         <main class="app stack">
             <div class="stack">
                 <h1>GitHub Preview</h1>
-                <p class="hint">Paste a raw GitHub URL or a GitHub blob URL.</p>
+                <p>Preview HTML files directly from GitHub without cloning.</p>
             </div>
 
             <form id="preview-form" class="stack">
@@ -24,6 +24,18 @@
                 />
                 <button class="button" type="submit">Preview</button>
             </form>
+
+            <section class="stack">
+                <h2>Usage</h2>
+                <p>
+                    <strong>Input:</strong> paste a GitHub raw or blob URL and
+                    preview it.
+                </p>
+                <p>
+                    <strong>Replace:</strong> append the thing after
+                    <code>raw.githubusercontent.com</code> to current URL.
+                </p>
+            </section>
 
             <section class="stack">
                 <h2>Examples</h2>
@@ -44,6 +56,12 @@
                     </button>
                 </div>
             </section>
+
+            <footer class="hint">
+                By <a href="https://github.com/PRO-2684/">PRO-2684</a> |
+                Contribute on
+                <a href="https://github.com/PRO-2684/GitHub-Preview/">GitHub</a>
+            </footer>
         </main>
 
         <script src="./app.js"></script>
