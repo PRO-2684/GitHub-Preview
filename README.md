@@ -52,6 +52,10 @@ Detailed feature comparison:
 | Relative path handling | 🟢 (request remapping) | 🟢 | 🟡 (`<base>` + rewriting) |
 | Reliability | High | Depends on service | High |
 
+## Caveats
+
+- Some websites may use absolute paths (e.g. `/assets/style.css`). This will error.
+
 ## Credits
 
 - [htmlpreview](https://htmlpreview.github.io/)
