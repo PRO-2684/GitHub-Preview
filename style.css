@@ -41,6 +41,7 @@ body {
     }
 
     code {
+        display: inline-block;
         padding: 0.125rem 0.375rem;
         border: 1px solid var(--color-border);
         border-radius: 0.4rem;
@@ -83,4 +84,34 @@ body {
 
 .example {
     text-align: left;
+}
+
+details {
+    /* Indent content */
+    padding: 0 1em;
+    border: 1px solid var(--color-border);
+    border-radius: 0.5em;
+
+    p {
+        margin: 0.5em 0;
+    }
+
+    >summary {
+        cursor: pointer;
+        /* Enlarge clickable area */
+        padding: 0.5em 1em;
+        /* Align summary with content edges */
+        margin: 0 -1em;
+    }
+
+    &:open{
+        summary {
+            /* Nice little separator */
+            border-bottom: 1px dashed var(--color-border);
+        }
+
+        &::details-content {
+            padding: 0.5em 0;
+        }
+    }
 }
