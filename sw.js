@@ -34,10 +34,12 @@ async function handleSameOriginRequest(request, url) {
     if (!res.ok) return res;
 
     // Return with inferred content type
+    const newHeaders = new Headers(res.headers);
+    newHeaders.set("Content-Type", inferType(rest[rest.length - 1]));
     return new Response(res.body, {
-        headers: {
-            "Content-Type": inferType(rest[rest.length - 1]),
-        },
+        status: res.status,
+        statusText: res.statusText,
+        headers: newHeaders,
     });
 }
 
