@@ -2,12 +2,16 @@ const ORIGIN = self.location.origin;
 const PREFIX = self.location.pathname.split("/").slice(0, -1).join("/") + "/";
 const CONTENT_TYPES = new Map([
     [".html", "text/html"],
+    [".htm", "text/html"],
     [".js", "application/javascript"],
+    [".mjs", "application/javascript"],
+    [".jsonld", "application/ld+json"],
     [".json", "application/json"],
+    [".webmanifest", "application/manifest+json"],
     [".css", "text/css"],
-    [".png", "image/png"],
-    [".jpg", "image/jpeg"],
-    [".jpeg", "image/jpeg"],
+    [".svg", "image/svg+xml"],
+    [".xml", "application/xml"],
+    [".md", "text/markdown"],
 ]);
 
 self.addEventListener("install", () => {

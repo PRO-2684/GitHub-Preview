@@ -62,7 +62,6 @@ Detailed feature comparison:
 
 ## TODO
 
-- [ ] Better MIME type detection (currently only based on file extension)
 - [ ] Asset caching and offline support
     - [ ] Cache assets of this app
     - [ ] Cache assets of the previewed page (user control?)
