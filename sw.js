@@ -45,6 +45,7 @@ async function handleSameOriginRequest(request, url) {
 
 function inferType(path) {
     // TODO: better MIME inference
+    // TODO: Preserve charset; Like `text/plain; charset=utf-8` -> `text/html; charset=utf-8`
     if (path.endsWith(".html")) return "text/html";
     if (path.endsWith(".js")) return "application/javascript";
     if (path.endsWith(".json")) return "application/json";
