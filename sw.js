@@ -1,5 +1,14 @@
 const ORIGIN = self.location.origin;
 const PREFIX = self.location.pathname.split("/").slice(0, -1).join("/") + "/";
+const CONTENT_TYPES = new Map([
+    [".html", "text/html"],
+    [".js", "application/javascript"],
+    [".json", "application/json"],
+    [".css", "text/css"],
+    [".png", "image/png"],
+    [".jpg", "image/jpeg"],
+    [".jpeg", "image/jpeg"],
+]);
 
 self.addEventListener("install", () => {
     self.skipWaiting();
@@ -35,7 +44,10 @@ async function handleSameOriginRequest(request, url) {
 
     // Return with inferred content type
     const newHeaders = new Headers(res.headers);
-    newHeaders.set("Content-Type", inferType(rest[rest.length - 1]));
+    newHeaders.set(
+        "Content-Type",
+        fixMIME(rest[rest.length - 1], res.headers.get("Content-Type")),
+    );
     return new Response(res.body, {
         status: res.status,
         statusText: res.statusText,
@@ -43,14 +55,12 @@ async function handleSameOriginRequest(request, url) {
     });
 }
 
-function inferType(path) {
-    // TODO: better MIME inference
-    // TODO: Preserve charset; Like `text/plain; charset=utf-8` -> `text/html; charset=utf-8`
-    if (path.endsWith(".html")) return "text/html";
-    if (path.endsWith(".js")) return "application/javascript";
-    if (path.endsWith(".json")) return "application/json";
-    if (path.endsWith(".css")) return "text/css";
-    if (path.endsWith(".png")) return "image/png";
-    if (path.endsWith(".jpg") || path.endsWith(".jpeg")) return "image/jpeg";
-    return "text/plain";
+function fixMIME(path, contentType = "") {
+    const [origMIME, ...params] = contentType.split(";");
+    if (origMIME && origMIME.trim() !== "text/plain") {
+        return contentType; // If the original MIME is not text/plain, we trust it
+    }
+    const ext = path.slice(path.lastIndexOf("."));
+    const newMIME = CONTENT_TYPES.get(ext) || "text/plain";
+    return [newMIME, ...params].join(";").trim();
 }
