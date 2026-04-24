@@ -29,6 +29,8 @@ async function registerSW() {
     }
 }
 
+registerSW();
+
 class GitHubLink {
     /**
      * @param {GitHubLinkInit} options
@@ -162,8 +164,6 @@ class GitHubLink {
     }
 }
 
-registerSW();
-
 /** @type {HTMLInputElement} */
 const input = document.getElementById("url");
 /** @type {HTMLFormElement} */
@@ -204,6 +204,24 @@ function updateInfo() {
     }
 }
 
+updateInfo();
+
+const url = new URL(location);
+function loadFromUrl() {
+    const value = url.searchParams.get("url");
+    if (value) {
+        input.value = value;
+        updateInfo();
+    }
+}
+function updateUrl() {
+    const value = input.value.trim();
+    url.searchParams.set("url", value);
+    history.replaceState(null, "", url);
+}
+
+loadFromUrl();
+
 form.addEventListener("submit", (event) => {
     event.preventDefault();
 
@@ -220,10 +238,14 @@ examples.addEventListener("click", (event) => {
     if (!button) return;
     input.value = button.dataset.url;
     updateInfo();
+    updateUrl();
     input.focus();
 });
 
-input.addEventListener("input", updateInfo);
+input.addEventListener("input", () => {
+    updateInfo();
+    updateUrl();
+});
 
 document.addEventListener("keydown", (event) => {
     // Focus on Enter
@@ -242,5 +264,3 @@ document.addEventListener("keydown", (event) => {
         event.preventDefault();
     }
 });
-
-updateInfo();
