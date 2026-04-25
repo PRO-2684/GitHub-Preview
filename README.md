@@ -63,6 +63,4 @@ Detailed feature comparison:
 
 ## TODO
 
-- [ ] Asset caching and offline support
-    - [ ] Cache assets of this app
-    - [ ] Cache assets of the previewed page (user control?)
+- [x] Asset caching and offline support for this app

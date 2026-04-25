@@ -1,3 +1,13 @@
+const VERSION = "1777120445";
+const CACHE_NAME = `github-preview-${VERSION}`;
+const APP_RESOURCES = [
+    "app.js",
+    "index.html",
+    "style.css",
+    "favicon.svg",
+    "manifest.json",
+];
+
 const ORIGIN = self.location.origin;
 const PREFIX = self.location.pathname.split("/").slice(0, -1).join("/") + "/";
 const CONTENT_TYPES = new Map([
@@ -14,12 +24,36 @@ const CONTENT_TYPES = new Map([
     [".md", "text/markdown"],
 ]);
 
-self.addEventListener("install", () => {
+self.addEventListener("install", (event) => {
     self.skipWaiting();
+    event.waitUntil(
+        caches
+            .open(CACHE_NAME)
+            .then(async (cache) => {
+                console.info("Caching app resources...");
+                await cache.addAll(APP_RESOURCES);
+                console.info("App resources cached successfully.");
+            })
+            .catch((error) => {
+                console.error("Cache installation failed:", error);
+            }),
+    );
 });
 
 self.addEventListener("activate", (event) => {
-    event.waitUntil(self.clients.claim());
+    event.waitUntil(clients.claim());
+    event.waitUntil(
+        caches.keys().then((cacheNames) => {
+            return Promise.all(
+                cacheNames.map((name) => {
+                    if (name !== CACHE_NAME) {
+                        console.info(`Deleting cache: ${name}`);
+                        return caches.delete(name);
+                    }
+                }),
+            );
+        }),
+    );
 });
 
 self.addEventListener("fetch", (event) => {
@@ -35,8 +69,18 @@ async function handleSameOriginRequest(request, url) {
     // Split: owner/repo/(commit|refs/heads|refs/tags)/...
     const parts = path.split("/");
     if (parts.length < 4) {
-        // If length < 4, it should be a request to the app itself, so we don't modify it
-        return fetch(request);
+        // If length < 4, it should be a request to the app itself
+        const requestUrl = new URL(request.url);
+        if (requestUrl.pathname === "/") {
+            requestUrl.pathname = "/index.html"; // Normalize root to index.html
+        }
+        const filename = requestUrl.pathname.split("/").pop();
+        if (!APP_RESOURCES.includes(filename)) {
+            return new Response("Not found", { status: 404 });
+        }
+        return caches
+            .match(requestUrl, { ignoreSearch: true })
+            .then((response) => response || fetchAndCache(request));
     }
 
     const [owner, repo, ...rest] = parts;
@@ -57,6 +101,25 @@ async function handleSameOriginRequest(request, url) {
         statusText: res.statusText,
         headers: newHeaders,
     });
+}
+
+async function fetchAndCache(request) {
+    try {
+        const response = await fetch(request);
+        if (
+            response &&
+            (response.status === 200 ||
+                response.status === 0 ||
+                response.type === "basic")
+        ) {
+            const cache = await caches.open(CACHE_NAME);
+            cache.put(request, response.clone());
+        }
+        return response;
+    } catch (error) {
+        const cached = await caches.match(request);
+        return cached || new Response("You are offline", { status: 503 });
+    }
 }
 
 function fixMIME(path, contentType = "") {
