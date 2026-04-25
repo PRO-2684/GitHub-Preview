@@ -55,6 +55,7 @@ Detailed feature comparison:
 ## Caveats
 
 - Some websites may use absolute paths (e.g. `/assets/style.css`). This will error.
+- Since service workers cannot intercept other service workers' scripts, so the service workers on the previewed page won't work.
 
 ## Credits
 
