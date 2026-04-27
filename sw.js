@@ -1,4 +1,4 @@
-const VERSION = "1777120445";
+const VERSION = "1777301053";
 const CACHE_NAME = `github-preview-${VERSION}`;
 const APP_RESOURCES = [
     "app.js",
@@ -68,19 +68,21 @@ async function handleSameOriginRequest(request, url) {
 
     // Split: owner/repo/(commit|refs/heads|refs/tags)/...
     const parts = path.split("/");
-    if (parts.length < 4) {
-        // If length < 4, it should be a request to the app itself
-        const requestUrl = new URL(request.url);
-        if (requestUrl.pathname === "/") {
-            requestUrl.pathname = "/index.html"; // Normalize root to index.html
+    if (parts.length === 1) {
+        // If length = 1, it should be a request to the app itself
+        let filename = parts[0];
+        if (filename === "") {
+            filename = "index.html"; // Normalize to index.html
+            url.pathname += "index.html"; // Update URL for caching lookup
         }
-        const filename = requestUrl.pathname.split("/").pop();
         if (!APP_RESOURCES.includes(filename)) {
             return new Response("Not found", { status: 404 });
         }
         return caches
-            .match(requestUrl, { ignoreSearch: true })
+            .match(url, { ignoreSearch: true })
             .then((response) => response || fetchAndCache(request));
+    } else if (parts.length < 4) {
+        return new Response("Not found", { status: 404 });
     }
 
     const [owner, repo, ...rest] = parts;
