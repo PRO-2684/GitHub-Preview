@@ -42,15 +42,16 @@ Detailed feature comparison:
 
 | Feature | This project | [raw.githack.com](https://raw.githack.com/) | [htmlpreview](https://htmlpreview.github.io/) |
 |--------|-------------|------------------|-------------|
-| Architecture | Client-side (Service Worker) | Server-side proxy | Client + Server (optional proxy fallback) |
-| Mechanism | Network interception | Server Proxy | HTML rewrite |
+| Architecture | Client-side | Server-side | Client + Server |
+| Mechanism | Service Worker | Server Proxy | HTML rewrite + optional proxy fallback |
 | Backend-free | 🟢 | 🔴 | 🟡 (proxy fallback) |
 | Fix `Content-Type` | 🟢 | 🟢 | 🟢 |
 | Static assets (`<img>`, `<script>`, `<link>`) | 🟢 | 🟢 | 🟢 |
-| Runtime requests (`fetch`, XHR) | 🟢 | 🟢 | 🔴 |
+| Runtime requests (`fetch`, XHR) | 🟢 | 🟢 | 🟡 (`<base>`) |
 | Dynamic resources | 🟢 | 🟢 | 🔴 |
-| Relative path handling | 🟢 (request remapping) | 🟢 | 🟡 (`<base>` + rewriting) |
-| Reliability | High | Depends on service | High |
+| Relative path handling | 🟢 (request remapping) | 🟢 | 🟢 (`<base>`) |
+| Absolute path handling | 🔴 | 🔴 | 🔴 |
+| Service Worker on target | 🔴 | 🟢 | 🔴 |
 
 ## Caveats
 
