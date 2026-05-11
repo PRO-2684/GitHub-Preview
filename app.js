@@ -168,6 +168,8 @@ class GitHubLink {
 const input = document.getElementById("url");
 /** @type {HTMLFormElement} */
 const form = document.getElementById("preview-form");
+/** @type {HTMLButtonElement} */
+const share = document.getElementById("share");
 /** @type {HTMLElement} */
 const usage = document.getElementById("usage");
 /** @type {HTMLElement} */
@@ -216,11 +218,36 @@ function loadFromUrl() {
 }
 function updateUrl() {
     const value = input.value.trim();
-    url.searchParams.set("url", value);
+    if (value) {
+        url.searchParams.set("url", value);
+    } else {
+        url.searchParams.delete("url");
+    }
     history.replaceState(null, "", url);
 }
 
 loadFromUrl();
+
+/**
+ * Copy a landing-page link so service worker installation can happen first.
+ * @returns {Promise<void>}
+ */
+async function copyShareLink() {
+    const value = input.value.trim();
+    if (!value) return;
+
+    GitHubLink.parse(value);
+
+    const shareUrl = new URL(location);
+    shareUrl.pathname = url.pathname;
+    shareUrl.searchParams.set("url", value);
+    await navigator.clipboard.writeText(shareUrl.href);
+
+    share.textContent = "Copied";
+    setTimeout(() => {
+        share.textContent = "Share";
+    }, 1200);
+}
 
 form.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -247,6 +274,12 @@ input.addEventListener("input", () => {
     updateUrl();
 });
 
+share.addEventListener("click", () => {
+    copyShareLink().catch((error) => {
+        alert(error instanceof Error ? error.message : String(error));
+    });
+});
+
 document.addEventListener("keydown", (event) => {
     // Focus on Enter
     if (event.key === "Enter" && document.activeElement !== input) {
@@ -258,6 +291,7 @@ document.addEventListener("keydown", (event) => {
         if (input.value) {
             input.value = "";
             updateInfo();
+            updateUrl();
         } else {
             input.blur();
         }

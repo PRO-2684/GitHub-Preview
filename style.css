@@ -6,6 +6,7 @@
     --color-surface: light-dark(#f6f8fa, #161b22);
     --color-border: light-dark(#d1d9e0, #3d444d);
     --color-accent: light-dark(#0969da, #4493f8);
+    --color-share: light-dark(#28a745, #2ea043);
 }
 
 * {
@@ -78,8 +79,22 @@ body {
     }
 }
 
+.actions {
+    display: flex;
+    gap: 0.75rem;
+
+    .button {
+        flex: 1;
+    }
+}
+
 .button {
     background: var(--color-accent);
+
+    &#share {
+        /* Greenish share btn */
+        background: var(--color-share);
+    }
 }
 
 .example {

@@ -7,7 +7,9 @@ Preview HTML files directly from GitHub without cloning. [No backend. No privacy
 1. Visit [GitHub-Preview](https://pro-2684.github.io/GitHub-Preview/) once. (Registers [service worker](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorker))
 2. Paste the raw/blob link in the input box on the landing page and submit. Alternatively, replace `https://raw.githubusercontent.com/` with `https://pro-2684.github.io/GitHub-Preview/` and visit the URL.
 
-Here's a few examples:
+To share, always share the landing-page link (with `?url=...`). Direct preview links may not work before the service worker is installed.
+
+Here's a few examples you can try:
 
 - [Bootstrap's page](https://pro-2684.github.io/GitHub-Preview/twbs/bootstrap/0d0ca30f5db73cceb456597c78b3c8750263c2d5/2.3.2/index.html)
     - [Blob](https://github.com/twbs/bootstrap/blob/0d0ca30f5db73cceb456597c78b3c8750263c2d5/2.3.2/index.html)

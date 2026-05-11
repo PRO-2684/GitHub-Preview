@@ -30,7 +30,12 @@
                     autofocus
                     required
                 />
-                <button class="button" type="submit">Preview</button>
+                <div class="actions">
+                    <button class="button" type="submit">Preview</button>
+                    <button class="button" id="share" type="button">
+                        Share
+                    </button>
+                </div>
                 <p><strong>Repo:</strong> <code id="info-repo"></code></p>
                 <p><strong>Path:</strong> <code id="info-path"></code></p>
                 <p><strong>Ref:</strong> <code id="info-ref"></code></p>
@@ -39,14 +44,19 @@
             <section class="stack" id="usage">
                 <h2>Usage</h2>
                 <p>
-                    <strong>Input:</strong> paste a GitHub raw or blob URL and
+                    <strong>Input:</strong> Paste a GitHub raw or blob URL and
                     preview it.
                 </p>
                 <p>
-                    <strong>Replace:</strong> append the thing after
+                    <strong>Replace:</strong> Append the thing after
                     <code>raw.githubusercontent.com</code> to current URL.
                 </p>
-                <p>Here's a few examples you could try:</p>
+                <p class="hint">
+                    <strong>Share:</strong> Share the landing-page link with
+                    <code>?url=...</code>. Direct preview links may not work
+                    before the service worker is installed.
+                </p>
+                <p>Here's a few examples you can try:</p>
                 <button
                     class="example"
                     type="button"
