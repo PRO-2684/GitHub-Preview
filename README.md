@@ -37,6 +37,7 @@ Key differences between this project and other popular solutions:
 | This project | Intercepts **all network requests** via Service Worker and remaps them |
 | [raw.githack.com](https://raw.githack.com/) | Uses a **server-side proxy** to serve corrected responses |
 | [htmlpreview](https://htmlpreview.github.io/) | Rewrites **HTML content only**, cannot intercept runtime behavior |
+| [github-html-preview-extension](https://github.com/dohyeon5626/github-html-preview-extension) | Browser extension, uses a **server-side proxy** similar to raw.githack.com |
 
 Detailed feature comparison:
 
