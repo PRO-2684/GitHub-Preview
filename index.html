@@ -25,12 +25,9 @@
                     required
                 />
                 <button class="button" type="submit">Preview</button>
-                <details>
-                    <summary>Parsed info</summary>
-                    <p><strong>Repo:</strong> <code id="info-repo"></code></p>
-                    <p><strong>Path:</strong> <code id="info-path"></code></p>
-                    <p><strong>Ref:</strong> <code id="info-ref"></code></p>
-                </details>
+                <p><strong>Repo:</strong> <code id="info-repo"></code></p>
+                <p><strong>Path:</strong> <code id="info-path"></code></p>
+                <p><strong>Ref:</strong> <code id="info-ref"></code></p>
             </form>
 
             <section class="stack" id="usage">
@@ -58,29 +55,6 @@
                 >
                     Comprehensive Example (raw)
                 </button>
-            </section>
-
-            <section class="stack" id="mechanism">
-                <h2>How it works</h2>
-                <p>
-                    This project uses a Service Worker as a client-side proxy:
-                </p>
-                <ol>
-                    <li>
-                        Requests under <code>GitHub-Preview/...</code> are
-                        intercepted by the Service Worker.
-                    </li>
-                    <li>
-                        The path is mapped to
-                        <code>raw.githubusercontent.com/...</code>.
-                    </li>
-                    <li>The Service Worker fetches the original content.</li>
-                    <li>
-                        It fixes <code>Content-Type</code> (e.g.
-                        <code>text/plain</code> → <code>text/html</code>)
-                    </li>
-                    <li>Returns the modified response to the browser.</li>
-                </ol>
             </section>
 
             <footer class="hint">
