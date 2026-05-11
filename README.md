@@ -1,6 +1,6 @@
 # GitHub-Preview
 
-Preview HTML files directly from GitHub without cloning. No backend. No privacy concerns.
+Preview HTML files directly from GitHub without cloning. [No backend. No privacy concerns.](#how-it-works)
 
 ## Usage
 
