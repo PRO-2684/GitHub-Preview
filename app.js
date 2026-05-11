@@ -169,7 +169,7 @@ const input = document.getElementById("url");
 /** @type {HTMLFormElement} */
 const form = document.getElementById("preview-form");
 /** @type {HTMLElement} */
-const examples = document.getElementById("examples");
+const usage = document.getElementById("usage");
 /** @type {HTMLElement} */
 const infoRepo = document.getElementById("info-repo");
 /** @type {HTMLElement} */
@@ -233,7 +233,7 @@ form.addEventListener("submit", (event) => {
     }
 });
 
-examples.addEventListener("click", (event) => {
+usage.addEventListener("click", (event) => {
     const button = event.target.closest("[data-url]");
     if (!button) return;
     input.value = button.dataset.url;
