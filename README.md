@@ -1,6 +1,6 @@
 # GitHub-Preview
 
-Preview HTML files directly from GitHub without cloning.
+Preview HTML files directly from GitHub without cloning. No backend. No privacy concerns.
 
 ## Usage
 
@@ -57,6 +57,7 @@ Detailed feature comparison:
 
 - Some websites may use absolute paths (e.g. `/assets/style.css`). This will error.
 - Since service workers cannot intercept other service workers' scripts, so the service workers on the previewed page won't work.
+- If the website is using incorrect file extensions, this app won't work, because it guesses the content type based on the extension solely.
 
 ## Credits
 
