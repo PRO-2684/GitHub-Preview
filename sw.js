@@ -1,4 +1,4 @@
-const VERSION = "1777301053";
+const VERSION = "1778511077";
 const CACHE_NAME = `github-preview-${VERSION}`;
 const APP_RESOURCES = [
     "app.js",
@@ -80,7 +80,7 @@ async function handleSameOriginRequest(request, url) {
         }
         return caches
             .match(url, { ignoreSearch: true })
-            .then((response) => response || fetchAndCache(request));
+            .then((response) => response || fetchAndCache(url.pathname));
     } else if (parts.length < 4) {
         return new Response("Not found", { status: 404 });
     }
