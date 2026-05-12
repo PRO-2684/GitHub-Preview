@@ -9,7 +9,7 @@
 
 /**
  * Constructor input for a parsed GitHub link.
- * @typedef {{ user: string, repo: string, path: string, ref: GitRef }} GitHubLinkInit
+ * @typedef {{ user: string, repo: string, path: string, ref: GitRef, search?: string, hash?: string }} GitHubLinkInit
  */
 
 /**
@@ -36,11 +36,13 @@ class GitHubLink {
     /**
      * @param {GitHubLinkInit} options
      */
-    constructor({ user, repo, path, ref }) {
+    constructor({ user, repo, path, ref, search = "", hash = "" }) {
         this.user = user;
         this.repo = repo;
         this.path = path;
         this.ref = ref;
+        this.search = search;
+        this.hash = hash;
     }
 
     /**
@@ -53,11 +55,11 @@ class GitHubLink {
         const parts = url.pathname.split("/").filter(Boolean);
 
         if (url.origin === "https://raw.githubusercontent.com") {
-            return GitHubLink.parseRaw(parts);
+            return GitHubLink.parseRaw(parts, url);
         }
 
         if (url.origin === "https://github.com" && parts[2] === "blob") {
-            return GitHubLink.parseBlob(parts);
+            return GitHubLink.parseBlob(parts, url);
         }
 
         throw new Error(
@@ -69,9 +71,10 @@ class GitHubLink {
      * Parse a raw GitHub URL.
      * Supports both `refs/heads|tags/...` and direct commit paths.
      * @param {string[]} parts
+     * @param {URL} url
      * @returns {GitHubLink}
      */
-    static parseRaw(parts) {
+    static parseRaw(parts, url) {
         if (parts.length < 4) throw new Error("Invalid raw GitHub URL");
 
         const [user, repo, third, fourth, fifth, ...rest] = parts;
@@ -88,6 +91,8 @@ class GitHubLink {
                     type: fourth === "heads" ? "branch" : "tag",
                     value: fifth,
                 },
+                search: url.search,
+                hash: url.hash,
             });
         }
 
@@ -101,6 +106,8 @@ class GitHubLink {
                 type: "commit",
                 value: third,
             },
+            search: url.search,
+            hash: url.hash,
         });
     }
 
@@ -108,9 +115,10 @@ class GitHubLink {
      * Parse a `github.com/.../blob/...` URL.
      * Blob URLs only expose a branch-like ref or a commit SHA.
      * @param {string[]} parts
+     * @param {URL} url
      * @returns {GitHubLink}
      */
-    static parseBlob(parts) {
+    static parseBlob(parts, url) {
         const [user, repo, , refValue, ...pathParts] = parts;
         if (!user || !repo || !refValue || pathParts.length === 0) {
             throw new Error("Invalid GitHub blob URL");
@@ -124,6 +132,8 @@ class GitHubLink {
                 type: /^[0-9a-f]{7,40}$/i.test(refValue) ? "commit" : "branch",
                 value: refValue,
             },
+            search: url.search,
+            hash: url.hash,
         });
     }
 
@@ -131,7 +141,7 @@ class GitHubLink {
      * Convert the normalized link back to the raw preview route.
      * @returns {string}
      */
-    toRawPath() {
+    #toRawPath() {
         const base = [this.user, this.repo];
 
         if (this.ref.type === "branch") {
@@ -147,6 +157,14 @@ class GitHubLink {
         }
 
         return [...base, this.ref.value, this.path].join("/");
+    }
+
+    /**
+     * Convert the normalized link to the local preview URL.
+     * @returns {string}
+     */
+    toPreviewUrl() {
+        return `./${this.#toRawPath()}${this.search}${this.hash}`;
     }
 
     /**
@@ -243,7 +261,7 @@ async function autoPreview() {
     try {
         const link = GitHubLink.parse(value);
         await serviceWorkerReady;
-        location.replace(`./${link.toRawPath()}`);
+        location.replace(link.toPreviewUrl());
     } catch (error) {
         url.searchParams.delete("preview");
         history.replaceState(null, "", url);
@@ -278,7 +296,7 @@ form.addEventListener("submit", (event) => {
 
     try {
         const link = GitHubLink.parse(input.value.trim());
-        location.href = `./${link.toRawPath()}`;
+        location.href = link.toPreviewUrl();
     } catch (error) {
         alert(error instanceof Error ? error.message : String(error));
     }

@@ -1,4 +1,4 @@
-const VERSION = "1778561939";
+const VERSION = "1778561940";
 const CACHE_NAME = `github-preview-${VERSION}`;
 const APP_RESOURCES = [
     "app.js",
@@ -86,7 +86,10 @@ async function handleSameOriginRequest(request, url) {
     }
 
     const [owner, repo, ...rest] = parts;
-    const rawUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${rest.join("/")}`;
+    const rawUrl = new URL(
+        `https://raw.githubusercontent.com/${owner}/${repo}/${rest.join("/")}`,
+    );
+    rawUrl.search = url.search;
 
     // Fetch original
     const res = await fetch(rawUrl);
