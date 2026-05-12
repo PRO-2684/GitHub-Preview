@@ -20,7 +20,7 @@ Here's a few examples you can try:
 
 ## Integrations
 
-- [GitHub Preview (UserScript)](./integrations/userscript/): A UserScript that automatically redirects GitHub raw/blob URLs to the preview app.
+- [GitHub Preview (UserScript)](./integrations/userscript/): Adds preview button on code viewer.
 
 ## How it works
 
