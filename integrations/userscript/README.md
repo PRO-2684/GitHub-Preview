@@ -5,3 +5,8 @@
 Adds a button on GitHub to preview HTML files directly. Uses [GitHub Preview](https://github.com/PRO-2684/GitHub-Preview/).
 
 ![Preview Button](./preview-button.png)
+
+## 🪄 Features
+
+- Event-driven: Faster and more efficient than mutation observers. Less error-prone than monkey-patching.
+- Seamless: Reuses GitHub's design language and icon. Blends in perfectly with the UI.

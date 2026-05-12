@@ -2,7 +2,7 @@
 
 Preview HTML files directly from GitHub without cloning. [No backend. No privacy concerns.](#how-it-works)
 
-## Usage
+## 📖 Usage
 
 1. Visit [GitHub-Preview](https://pro-2684.github.io/GitHub-Preview/) once. (Registers [service worker](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorker))
 2. Paste the raw/blob link in the input box on the landing page and submit. Alternatively, replace `https://raw.githubusercontent.com/` with `https://pro-2684.github.io/GitHub-Preview/` and visit the URL.
@@ -18,11 +18,11 @@ Here's a few examples you can try:
     - [Blob](https://github.com/PRO-2684/GitHub-Preview/blob/main/examples/index.html)
     - [Raw](https://raw.githubusercontent.com/PRO-2684/GitHub-Preview/refs/heads/main/examples/index.html)
 
-## Integrations
+## ⚙️ Integrations
 
 - [GitHub Preview (UserScript)](./integrations/userscript/): Adds preview button on code viewer.
 
-## How it works
+## 🤔 How it works
 
 This project uses a Service Worker as a client-side proxy:
 
@@ -34,7 +34,7 @@ This project uses a Service Worker as a client-side proxy:
 
 Because all requests (including those triggered by scripts like `fetch("./data.json")`) go through the Service Worker, runtime resource loading works transparently.
 
-## Comparison
+## 🔎 Comparison
 
 Key differences between this project and other popular solutions:
 
@@ -60,16 +60,16 @@ Detailed feature comparison:
 | Absolute path handling | 🔴 | 🔴 | 🔴 |
 | Service Worker on target | 🔴 | 🟢 | 🔴 |
 
-## Caveats
+## 🕳️ Caveats
 
 - Some websites may use absolute paths (e.g. `/assets/style.css`). This will error.
 - Since service workers cannot intercept other service workers' scripts, so the service workers on the previewed page won't work.
 - If the website is using incorrect file extensions, this app won't work, because it guesses the content type based on the extension solely.
 
-## Credits
+## 🎉 Credits
 
 - [htmlpreview](https://htmlpreview.github.io/)
 
-## TODO
+## ✅ TODO
 
 - [x] Asset caching and offline support for this app
