@@ -26,10 +26,11 @@ async function registerSW() {
         await navigator.serviceWorker.register("./sw.js", {
             scope: "./",
         });
+        await navigator.serviceWorker.ready;
     }
 }
 
-registerSW();
+const serviceWorkerReady = registerSW();
 
 class GitHubLink {
     /**
@@ -223,10 +224,32 @@ function updateUrl() {
     } else {
         url.searchParams.delete("url");
     }
+    url.searchParams.delete("preview");
     history.replaceState(null, "", url);
 }
 
 loadFromUrl();
+
+/**
+ * Open the preview route after the service worker has a chance to install.
+ * @returns {Promise<void>}
+ */
+async function autoPreview() {
+    if (url.searchParams.get("preview") !== "1") return;
+
+    const value = input.value.trim();
+    if (!value) return;
+
+    try {
+        const link = GitHubLink.parse(value);
+        await serviceWorkerReady;
+        location.replace(`./${link.toRawPath()}`);
+    } catch (error) {
+        url.searchParams.delete("preview");
+        history.replaceState(null, "", url);
+        alert(error instanceof Error ? error.message : String(error));
+    }
+}
 
 /**
  * Copy a landing-page link so service worker installation can happen first.
@@ -241,6 +264,7 @@ async function copyShareLink() {
     const shareUrl = new URL(location);
     shareUrl.pathname = url.pathname;
     shareUrl.searchParams.set("url", value);
+    shareUrl.searchParams.set("preview", "1");
     await navigator.clipboard.writeText(shareUrl.href);
 
     share.textContent = "Copied";
@@ -298,3 +322,5 @@ document.addEventListener("keydown", (event) => {
         event.preventDefault();
     }
 });
+
+autoPreview();

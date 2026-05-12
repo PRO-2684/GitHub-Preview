@@ -7,14 +7,14 @@ Preview HTML files directly from GitHub without cloning. [No backend. No privacy
 1. Visit [GitHub-Preview](https://pro-2684.github.io/GitHub-Preview/) once. (Registers [service worker](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorker))
 2. Paste the raw/blob link in the input box on the landing page and submit. Alternatively, replace `https://raw.githubusercontent.com/` with `https://pro-2684.github.io/GitHub-Preview/` and visit the URL.
 
-To share, always share the landing-page link (with `?url=...`). Direct preview links may not work before the service worker is installed.
+Share links with `?url=...&preview=1` so the landing page can install the service worker before opening the preview.
 
 Here's a few examples you can try:
 
-- [Bootstrap's page](https://pro-2684.github.io/GitHub-Preview/twbs/bootstrap/0d0ca30f5db73cceb456597c78b3c8750263c2d5/2.3.2/index.html)
+- [Bootstrap's page](https://pro-2684.github.io/GitHub-Preview/?url=https%3A%2F%2Fgithub.com%2Ftwbs%2Fbootstrap%2Fblob%2F0d0ca30f5db73cceb456597c78b3c8750263c2d5%2F2.3.2%2Findex.html&preview=1)
     - [Blob](https://github.com/twbs/bootstrap/blob/0d0ca30f5db73cceb456597c78b3c8750263c2d5/2.3.2/index.html)
     - [Raw](https://raw.githubusercontent.com/twbs/bootstrap/0d0ca30f5db73cceb456597c78b3c8750263c2d5/2.3.2/index.html)
-- [A Comprehensive Example](https://pro-2684.github.io/GitHub-Preview/PRO-2684/GitHub-Preview/refs/heads/main/examples/index.html)
+- [A Comprehensive Example](https://pro-2684.github.io/GitHub-Preview/?url=https%3A%2F%2Fraw.githubusercontent.com%2FPRO-2684%2FGitHub-Preview%2Frefs%2Fheads%2Fmain%2Fexamples%2Findex.html&preview=1)
     - [Blob](https://github.com/PRO-2684/GitHub-Preview/blob/main/examples/index.html)
     - [Raw](https://raw.githubusercontent.com/PRO-2684/GitHub-Preview/refs/heads/main/examples/index.html)
 
