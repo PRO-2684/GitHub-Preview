@@ -1,4 +1,4 @@
-const VERSION = "1778561940";
+const VERSION = "1778572208";
 const CACHE_NAME = `github-preview-${VERSION}`;
 const APP_RESOURCES = [
     "app.js",

@@ -62,8 +62,12 @@ class GitHubLink {
             return GitHubLink.parseBlob(parts, url);
         }
 
+        if (url.origin === "https://github.com" && parts[2] === "raw") {
+            return GitHubLink.parseGitHubRaw(parts, url);
+        }
+
         throw new Error(
-            "Only raw.githubusercontent.com and github.com/blob links are supported",
+            "Only raw.githubusercontent.com, github.com/blob, and github.com/raw links are supported",
         );
     }
 
@@ -131,6 +135,51 @@ class GitHubLink {
             ref: {
                 type: /^[0-9a-f]{7,40}$/i.test(refValue) ? "commit" : "branch",
                 value: refValue,
+            },
+            search: url.search,
+            hash: url.hash,
+        });
+    }
+
+    /**
+     * Parse a `github.com/.../raw/...` URL.
+     * @param {string[]} parts
+     * @param {URL} url
+     * @returns {GitHubLink}
+     */
+    static parseGitHubRaw(parts, url) {
+        const [user, repo, , first, second, third, ...rest] = parts;
+        if (!user || !repo || !first) {
+            throw new Error("Invalid GitHub raw URL");
+        }
+
+        if (first === "refs" && (second === "heads" || second === "tags")) {
+            if (!third || rest.length === 0)
+                throw new Error("Invalid GitHub raw URL");
+
+            return new GitHubLink({
+                user,
+                repo,
+                path: rest.join("/"),
+                ref: {
+                    type: second === "heads" ? "branch" : "tag",
+                    value: third,
+                },
+                search: url.search,
+                hash: url.hash,
+            });
+        }
+
+        const pathParts = [second, third, ...rest].filter(Boolean);
+        if (pathParts.length === 0) throw new Error("Invalid GitHub raw URL");
+
+        return new GitHubLink({
+            user,
+            repo,
+            path: pathParts.join("/"),
+            ref: {
+                type: /^[0-9a-f]{7,40}$/i.test(first) ? "commit" : "branch",
+                value: first,
             },
             search: url.search,
             hash: url.hash,
