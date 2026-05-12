@@ -18,6 +18,10 @@ Here's a few examples you can try:
     - [Blob](https://github.com/PRO-2684/GitHub-Preview/blob/main/examples/index.html)
     - [Raw](https://raw.githubusercontent.com/PRO-2684/GitHub-Preview/refs/heads/main/examples/index.html)
 
+## Integrations
+
+- [GitHub Preview (UserScript)](./integrations/userscript/): A UserScript that automatically redirects GitHub raw/blob URLs to the preview app.
+
 ## How it works
 
 This project uses a Service Worker as a client-side proxy:
