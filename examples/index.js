@@ -4,14 +4,24 @@ setTimeout(() => {
         .then((response) => response.json())
         .then((data) => {
             document.getElementById("fetch-relative").textContent =
-                JSON.stringify(data);
+                "🟢 Success! " + JSON.stringify(data);
+        })
+        .catch((error) => {
+            console.error("Fetch error:", error);
+            document.getElementById("fetch-relative").textContent =
+                "🔴 Failed: " + error.message;
         });
     // Fetch (absolute path)
     fetch("/data.json")
         .then((response) => response.json())
         .then((data) => {
             document.getElementById("fetch-absolute").textContent =
-                JSON.stringify(data);
+                "🟢 Success! " + JSON.stringify(data);
+        })
+        .catch((error) => {
+            console.error("Fetch error:", error);
+            document.getElementById("fetch-absolute").textContent =
+                "🔴 Failed: " + error.message;
         });
     // Service Worker registration
     const swStatus = document.getElementById("service-worker");
@@ -23,7 +33,7 @@ setTimeout(() => {
             })
             .catch((error) => {
                 console.error("Service Worker registration failed:", error);
-                swStatus.textContent = "🔴 Failed!";
+                swStatus.textContent = "🔴 Failed: " + error.message;
             });
     } else {
         swStatus.textContent = "🟡 Service Worker not supported!";
