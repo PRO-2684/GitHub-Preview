@@ -26,14 +26,13 @@ setTimeout(() => {
     // Fetch (streaming)
     fetch("./lorem.txt")
         .then(async (response) => {
-            if (!response.body) {
-                throw new Error("ReadableStream not supported");
-            }
+            if (!response.body) throw new Error("ReadableStream not supported");
 
             const status = document.getElementById("fetch-streaming");
             const totalBytes = Number(response.headers.get("Content-Length"));
             const reader = response.body.getReader();
             const decoder = new TextDecoder();
+
             let receivedBytes = 0;
             let text = "";
 
@@ -43,7 +42,9 @@ setTimeout(() => {
                 receivedBytes += value.byteLength;
                 text += decoder.decode(value, { stream: true });
                 if (Number.isFinite(totalBytes) && totalBytes > 0) {
-                    const percent = Math.round((receivedBytes / totalBytes) * 100);
+                    const percent = Math.round(
+                        (receivedBytes / totalBytes) * 100,
+                    );
                     status.textContent = `🟡 Streaming... ${receivedBytes}/${totalBytes} bytes (${percent}%)`;
                 } else {
                     status.textContent = `🟡 Streaming... ${receivedBytes} bytes`;
@@ -64,7 +65,9 @@ setTimeout(() => {
         .then(async (response) => {
             const text = await response.text();
             if (text.length > 0) {
-                throw new Error(`Expected empty body, got ${text.length} bytes`);
+                throw new Error(
+                    `Expected empty body, got ${text.length} bytes`,
+                );
             }
 
             document.getElementById("fetch-head").textContent =
