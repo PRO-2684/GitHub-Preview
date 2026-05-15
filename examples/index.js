@@ -59,6 +59,22 @@ setTimeout(() => {
             document.getElementById("fetch-streaming").textContent =
                 "🔴 Failed: " + error.message;
         });
+    // Fetch (HEAD)
+    fetch("./data.json", { method: "HEAD" })
+        .then(async (response) => {
+            const text = await response.text();
+            if (text.length > 0) {
+                throw new Error(`Expected empty body, got ${text.length} bytes`);
+            }
+
+            document.getElementById("fetch-head").textContent =
+                "🟢 Success! Body empty";
+        })
+        .catch((error) => {
+            console.error("HEAD fetch error:", error);
+            document.getElementById("fetch-head").textContent =
+                "🔴 Failed: " + error.message;
+        });
     // Service Worker registration
     const swStatus = document.getElementById("service-worker");
     if ("serviceWorker" in navigator) {
