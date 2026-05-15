@@ -92,7 +92,10 @@ async function handleSameOriginRequest(request, url) {
     rawUrl.search = url.search;
 
     // Fetch original
-    const req = new Request(rawUrl, request);
+    const req = new Request(rawUrl, {
+        mode: "cors",
+        ...request,
+    });
     const res = await fetch(req);
     if (!res.ok) return res;
 
