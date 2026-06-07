@@ -27,10 +27,8 @@ Automatic previews opened through `?url=...&preview=1` use the same dispatch
 logic as form submissions. Share links therefore retain their existing format
 and behavior.
 
-The service worker applies the same media classification to preview paths and
-redirects recognized media directly to GitHub's raw route. It does not inspect
-whether the request is a top-level navigation or a subresource. Only landing
-page dispatch opens `player.html`.
+The service worker does not classify media. Only landing-page dispatch opens
+`player.html`; direct preview paths retain the normal proxy behavior.
 
 ## Player Page
 
@@ -41,11 +39,9 @@ with the shared extension rules, and creates exactly one native element:
 - Video extensions render `<video controls>`.
 - Audio extensions render `<audio controls>`.
 
-The element source is the normalized `https://github.com/.../raw/...` URL.
-GitHub redirects ordinary files to raw content and Git LFS files to
-`media.githubusercontent.com`, so both storage types work without inspecting
-file contents. The browser makes native media and range requests directly
-instead of sending them through the service worker.
+The element source is the normalized `https://raw.githubusercontent.com/...`
+URL. The browser makes native media and range requests directly instead of
+sending them through the service worker.
 
 The player fills the available viewport while preserving the media aspect
 ratio. Audio uses a compact control bar centered in the page. Native browser
@@ -58,11 +54,9 @@ The landing page remains responsible for accepting only the GitHub raw and blob
 URL formats already supported by `GitHubLink`.
 
 The player also treats its query string as untrusted input. It accepts only an
-HTTPS `raw.githubusercontent.com` URL or a `github.com/.../raw/...` URL whose
-path has one of the configured media extensions. Raw-content URLs are
-normalized to the GitHub raw route so Git LFS pointers resolve to their stored
-objects. A missing, malformed, unsupported, or non-raw URL produces a visible
-error message and no media element.
+HTTPS `raw.githubusercontent.com` URL whose path has one of the configured media
+extensions. A missing, malformed, unsupported, or non-raw URL produces a
+visible error message and no media element.
 
 Browser codec support is not inferred from the extension. If Chromium or
 another browser cannot decode a listed format, the native media element reports
@@ -78,12 +72,11 @@ or codec fallback.
 - `player.js` validates the player query, classifies the media type, and creates
   the native media element.
 - `style.css` provides the shared player layout styles.
-- `sw.js` loads the shared media rules, adds the player resources to the
-  application cache, and redirects recognized media to raw content instead of
-  proxying it.
+- `sw.js` adds the player resources to the application cache and otherwise
+  retains its existing raw-content proxy behavior.
 
 `media.js` exposes one shared extension map and routing helpers to the landing
-page, player, service worker, and Node tests.
+page, player, and Node tests.
 
 ## Verification
 
@@ -108,3 +101,4 @@ Verification covers:
 - MIME sniffing or content-based media detection.
 - Image, PDF, or other document preview wrappers.
 - Proxying media bytes through the service worker.
+- Git LFS object resolution.

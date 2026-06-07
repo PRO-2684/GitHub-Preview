@@ -28,27 +28,13 @@ function getMediaType(path) {
 function parseMediaUrl(input) {
     if (!input) throw new Error("Missing media URL");
 
-    let url = new URL(input);
+    const url = new URL(input);
     const parts = url.pathname.split("/").filter(Boolean);
-
-    if (url.origin === "https://raw.githubusercontent.com") {
-        const [owner, repo, ...rest] = parts;
-        if (!owner || !repo || rest.length < 2) {
-            throw new Error("Expected an HTTPS GitHub raw URL");
-        }
-
-        const resolvedUrl = new URL(
-            `https://github.com/${owner}/${repo}/raw/${rest.join("/")}`,
-        );
-        resolvedUrl.search = url.search;
-        resolvedUrl.hash = url.hash;
-        url = resolvedUrl;
-    } else if (
-        url.origin !== "https://github.com" ||
-        parts[2] !== "raw" ||
-        parts.length < 5
+    if (
+        url.origin !== "https://raw.githubusercontent.com" ||
+        parts.length < 4
     ) {
-        throw new Error("Expected an HTTPS GitHub raw URL");
+        throw new Error("Expected an HTTPS raw GitHub URL");
     }
 
     const type = getMediaType(url.pathname);
@@ -69,30 +55,11 @@ function createPlayerUrl(mediaUrl, baseUrl) {
     return playerUrl.href;
 }
 
-/**
- * Convert a service-worker preview path to GitHub's LFS-aware raw route.
- * @param {string} path
- * @param {string} [search]
- * @returns {string | null}
- */
-function createGitHubRawUrl(path, search = "") {
-    const parts = path.split("/").filter(Boolean);
-    if (parts.length < 4 || !getMediaType(parts.at(-1))) return null;
-
-    const [owner, repo, ...rest] = parts;
-    const url = new URL(
-        `https://github.com/${owner}/${repo}/raw/${rest.join("/")}`,
-    );
-    url.search = search;
-    return url.href;
-}
-
 const MediaPreview = {
     mediaExtensions,
     getMediaType,
     parseMediaUrl,
     createPlayerUrl,
-    createGitHubRawUrl,
 };
 
 if (typeof module !== "undefined") {

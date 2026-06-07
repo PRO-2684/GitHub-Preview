@@ -2,7 +2,6 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 
 const {
-    createGitHubRawUrl,
     createPlayerUrl,
     getMediaType,
     parseMediaUrl,
@@ -41,7 +40,7 @@ test("ignores query and fragment suffixes while classifying", () => {
     assert.equal(getMediaType("/song.ogg#preview"), "audio");
 });
 
-test("normalizes raw GitHub media URLs through the LFS-aware route", () => {
+test("accepts raw GitHub media URLs without changing them", () => {
     const result = parseMediaUrl(
         "https://raw.githubusercontent.com/user/repo/main/media/demo.mp4?raw=1#start",
     );
@@ -49,19 +48,7 @@ test("normalizes raw GitHub media URLs through the LFS-aware route", () => {
     assert.equal(result.type, "video");
     assert.equal(
         result.url.href,
-        "https://github.com/user/repo/raw/main/media/demo.mp4?raw=1#start",
-    );
-});
-
-test("accepts GitHub raw routes without changing them", () => {
-    const result = parseMediaUrl(
-        "https://github.com/user/repo/raw/main/media/demo.mp4",
-    );
-
-    assert.equal(result.type, "video");
-    assert.equal(
-        result.url.href,
-        "https://github.com/user/repo/raw/main/media/demo.mp4",
+        "https://raw.githubusercontent.com/user/repo/main/media/demo.mp4?raw=1#start",
     );
 });
 
@@ -75,33 +62,19 @@ test("creates an encoded player URL relative to the app", () => {
     );
 });
 
-test("creates an LFS-aware raw URL from a preview path", () => {
-    assert.equal(
-        createGitHubRawUrl(
-            "user/repo/refs/heads/main/media/demo.mp4",
-            "?download=1",
-        ),
-        "https://github.com/user/repo/raw/refs/heads/main/media/demo.mp4?download=1",
-    );
-});
-
-test("does not create raw URLs for unsupported preview paths", () => {
-    assert.equal(
-        createGitHubRawUrl("user/repo/refs/heads/main/index.html"),
-        null,
-    );
-    assert.equal(createGitHubRawUrl("invalid.mp4"), null);
-});
-
 test("rejects missing, non-raw, and unsupported media URLs", () => {
     assert.throws(() => parseMediaUrl(""), /Missing media URL/);
     assert.throws(
         () => parseMediaUrl("https://example.com/demo.mp4"),
-        /GitHub raw URL/,
+        /raw GitHub URL/,
     );
     assert.throws(
         () => parseMediaUrl("http://raw.githubusercontent.com/u/r/main/a.mp4"),
-        /GitHub raw URL/,
+        /raw GitHub URL/,
+    );
+    assert.throws(
+        () => parseMediaUrl("https://github.com/u/r/raw/main/a.mp4"),
+        /raw GitHub URL/,
     );
     assert.throws(
         () =>

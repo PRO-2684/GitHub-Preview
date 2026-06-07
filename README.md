@@ -14,7 +14,7 @@ Media type is selected by extension:
 - Video: `webm`, `ogv`, `mkv`, `mp4`, `mov`
 - Audio: `mp3`, `flac`, `ogg`, `opus`, `wav`, `m4a`, `aac`
 
-Media uses GitHub's raw route so files stored with Git LFS resolve to their actual content. The landing page opens recognized media in the player. Direct preview paths and media requested by previewed pages redirect to raw content.
+The landing page opens recognized media in the player.
 
 Here's a few examples you can try:
 
@@ -72,6 +72,8 @@ Detailed feature comparison:
 - Some websites may use absolute paths (e.g. `/assets/style.css`). This will error.
 - Since service workers cannot intercept other service workers' scripts, so the service workers on the previewed page won't work.
 - If the website is using incorrect file extensions, this app won't work, because it guesses the content type based on the extension solely.
+- Git LFS files are not supported. GitHub's raw content host returns the LFS
+  pointer instead of the stored object. See [docs/NOTE.md](./docs/NOTE.md).
 
 ## 🎉 Credits
 
