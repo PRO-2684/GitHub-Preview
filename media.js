@@ -28,12 +28,27 @@ function getMediaType(path) {
 function parseMediaUrl(input) {
     if (!input) throw new Error("Missing media URL");
 
-    const url = new URL(input);
-    if (
-        url.protocol !== "https:" ||
-        url.hostname !== "raw.githubusercontent.com"
+    let url = new URL(input);
+    const parts = url.pathname.split("/").filter(Boolean);
+
+    if (url.origin === "https://raw.githubusercontent.com") {
+        const [owner, repo, ...rest] = parts;
+        if (!owner || !repo || rest.length < 2) {
+            throw new Error("Expected an HTTPS GitHub raw URL");
+        }
+
+        const resolvedUrl = new URL(
+            `https://github.com/${owner}/${repo}/raw/${rest.join("/")}`,
+        );
+        resolvedUrl.search = url.search;
+        resolvedUrl.hash = url.hash;
+        url = resolvedUrl;
+    } else if (
+        url.origin !== "https://github.com" ||
+        parts[2] !== "raw" ||
+        parts.length < 5
     ) {
-        throw new Error("Expected an HTTPS raw GitHub URL");
+        throw new Error("Expected an HTTPS GitHub raw URL");
     }
 
     const type = getMediaType(url.pathname);

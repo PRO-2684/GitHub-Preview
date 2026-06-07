@@ -40,7 +40,7 @@ test("ignores query and fragment suffixes while classifying", () => {
     assert.equal(getMediaType("/song.ogg#preview"), "audio");
 });
 
-test("accepts supported raw GitHub media URLs", () => {
+test("normalizes raw GitHub media URLs through the LFS-aware route", () => {
     const result = parseMediaUrl(
         "https://raw.githubusercontent.com/user/repo/main/media/demo.mp4?raw=1#start",
     );
@@ -48,7 +48,19 @@ test("accepts supported raw GitHub media URLs", () => {
     assert.equal(result.type, "video");
     assert.equal(
         result.url.href,
-        "https://raw.githubusercontent.com/user/repo/main/media/demo.mp4?raw=1#start",
+        "https://github.com/user/repo/raw/main/media/demo.mp4?raw=1#start",
+    );
+});
+
+test("accepts GitHub raw routes without changing them", () => {
+    const result = parseMediaUrl(
+        "https://github.com/user/repo/raw/main/media/demo.mp4",
+    );
+
+    assert.equal(result.type, "video");
+    assert.equal(
+        result.url.href,
+        "https://github.com/user/repo/raw/main/media/demo.mp4",
     );
 });
 
@@ -66,11 +78,11 @@ test("rejects missing, non-raw, and unsupported media URLs", () => {
     assert.throws(() => parseMediaUrl(""), /Missing media URL/);
     assert.throws(
         () => parseMediaUrl("https://example.com/demo.mp4"),
-        /raw GitHub URL/,
+        /GitHub raw URL/,
     );
     assert.throws(
         () => parseMediaUrl("http://raw.githubusercontent.com/u/r/main/a.mp4"),
-        /raw GitHub URL/,
+        /GitHub raw URL/,
     );
     assert.throws(
         () =>

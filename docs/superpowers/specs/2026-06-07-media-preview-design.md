@@ -36,9 +36,11 @@ with the shared extension rules, and creates exactly one native element:
 - Video extensions render `<video controls>`.
 - Audio extensions render `<audio controls>`.
 
-The element source is the normalized `https://raw.githubusercontent.com/...`
-URL. Using the real raw URL lets the browser make native media and range
-requests directly instead of sending them through the service worker.
+The element source is the normalized `https://github.com/.../raw/...` URL.
+GitHub redirects ordinary files to raw content and Git LFS files to
+`media.githubusercontent.com`, so both storage types work without inspecting
+file contents. The browser makes native media and range requests directly
+instead of sending them through the service worker.
 
 The player fills the available viewport while preserving the media aspect
 ratio. Audio uses a compact control bar centered in the page. Native browser
@@ -51,9 +53,11 @@ The landing page remains responsible for accepting only the GitHub raw and blob
 URL formats already supported by `GitHubLink`.
 
 The player also treats its query string as untrusted input. It accepts only an
-HTTPS `raw.githubusercontent.com` URL whose path has one of the configured media
-extensions. A missing, malformed, unsupported, or non-raw URL produces a
-visible error message and no media element.
+HTTPS `raw.githubusercontent.com` URL or a `github.com/.../raw/...` URL whose
+path has one of the configured media extensions. Raw-content URLs are
+normalized to the GitHub raw route so Git LFS pointers resolve to their stored
+objects. A missing, malformed, unsupported, or non-raw URL produces a visible
+error message and no media element.
 
 Browser codec support is not inferred from the extension. If Chromium or
 another browser cannot decode a listed format, the native media element reports

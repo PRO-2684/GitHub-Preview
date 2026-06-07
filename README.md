@@ -14,6 +14,8 @@ Media type is selected by extension:
 - Video: `webm`, `ogv`, `mkv`, `mp4`, `mov`
 - Audio: `mp3`, `flac`, `ogg`, `opus`, `wav`, `m4a`, `aac`
 
+Media uses GitHub's raw route so files stored with Git LFS resolve to their actual content.
+
 Here's a few examples you can try:
 
 - [Bootstrap's page](https://pro-2684.github.io/GitHub-Preview/?url=https%3A%2F%2Fgithub.com%2Ftwbs%2Fbootstrap%2Fblob%2F0d0ca30f5db73cceb456597c78b3c8750263c2d5%2F2.3.2%2Findex.html&preview=1)
@@ -43,27 +45,27 @@ Because all requests (including those triggered by scripts like `fetch("./data.j
 
 Key differences between this project and other popular solutions:
 
-| Approach | Description |
-|----------|------------|
-| This project | Intercepts **all network requests** via Service Worker and remaps them |
-| [raw.githack.com](https://raw.githack.com/) | Uses a **server-side proxy** to serve corrected responses |
-| [htmlpreview](https://htmlpreview.github.io/) | Rewrites **HTML content only**, cannot intercept runtime behavior |
+| Approach                                                                                      | Description                                                                |
+| --------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| This project                                                                                  | Intercepts **all network requests** via Service Worker and remaps them     |
+| [raw.githack.com](https://raw.githack.com/)                                                   | Uses a **server-side proxy** to serve corrected responses                  |
+| [htmlpreview](https://htmlpreview.github.io/)                                                 | Rewrites **HTML content only**, cannot intercept runtime behavior          |
 | [github-html-preview-extension](https://github.com/dohyeon5626/github-html-preview-extension) | Browser extension, uses a **server-side proxy** similar to raw.githack.com |
 
 Detailed feature comparison:
 
-| Feature | This project | [raw.githack.com](https://raw.githack.com/) | [htmlpreview](https://htmlpreview.github.io/) |
-|--------|-------------|------------------|-------------|
-| Architecture | Client-side | Server-side | Client + Server |
-| Mechanism | Service Worker | Server Proxy | HTML rewrite + optional proxy fallback |
-| Backend-free | 🟢 | 🔴 | 🟡 (proxy fallback) |
-| Fix `Content-Type` | 🟢 | 🟢 | 🟢 |
-| Static assets (`<img>`, `<script>`, `<link>`) | 🟢 | 🟢 | 🟢 |
-| Runtime requests (`fetch`, XHR) | 🟢 | 🟢 | 🟡 (`<base>`) |
-| Dynamic resources | 🟢 | 🟢 | 🔴 |
-| Relative path handling | 🟢 (request remapping) | 🟢 | 🟢 (`<base>`) |
-| Absolute path handling | 🔴 | 🔴 | 🔴 |
-| Service Worker on target | 🔴 | 🟢 | 🔴 |
+| Feature                                       | This project           | [raw.githack.com](https://raw.githack.com/) | [htmlpreview](https://htmlpreview.github.io/) |
+| --------------------------------------------- | ---------------------- | ------------------------------------------- | --------------------------------------------- |
+| Architecture                                  | Client-side            | Server-side                                 | Client + Server                               |
+| Mechanism                                     | Service Worker         | Server Proxy                                | HTML rewrite + optional proxy fallback        |
+| Backend-free                                  | 🟢                     | 🔴                                          | 🟡 (proxy fallback)                           |
+| Fix `Content-Type`                            | 🟢                     | 🟢                                          | 🟢                                            |
+| Static assets (`<img>`, `<script>`, `<link>`) | 🟢                     | 🟢                                          | 🟢                                            |
+| Runtime requests (`fetch`, XHR)               | 🟢                     | 🟢                                          | 🟡 (`<base>`)                                 |
+| Dynamic resources                             | 🟢                     | 🟢                                          | 🔴                                            |
+| Relative path handling                        | 🟢 (request remapping) | 🟢                                          | 🟢 (`<base>`)                                 |
+| Absolute path handling                        | 🔴                     | 🔴                                          | 🔴                                            |
+| Service Worker on target                      | 🔴                     | 🟢                                          | 🔴                                            |
 
 ## 🕳️ Caveats
 
