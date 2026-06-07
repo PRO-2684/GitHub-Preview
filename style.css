@@ -20,6 +20,33 @@ body {
     font: 16px/1.5 system-ui, sans-serif;
 }
 
+.player-page {
+    min-height: 100vh;
+}
+
+.player {
+    display: grid;
+    min-height: 100vh;
+    padding: 1rem;
+    place-items: center;
+
+    video {
+        width: 100%;
+        height: calc(100vh - 2rem);
+        object-fit: contain;
+    }
+
+    audio {
+        width: min(100%, 40rem);
+    }
+}
+
+.player-error {
+    padding: 1rem;
+    color: var(--color-text-muted);
+    text-align: center;
+}
+
 .stack {
     display: grid;
     gap: 0.75rem;

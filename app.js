@@ -217,6 +217,25 @@ class GitHubLink {
     }
 
     /**
+     * Convert the normalized link to its raw GitHub URL.
+     * @returns {string}
+     */
+    toRawUrl() {
+        return `https://raw.githubusercontent.com/${this.#toRawPath()}${this.search}${this.hash}`;
+    }
+
+    /**
+     * Select the media player or the existing direct preview route.
+     * @returns {string}
+     */
+    toTargetUrl() {
+        if (MediaPreview.getMediaType(this.path)) {
+            return MediaPreview.createPlayerUrl(this.toRawUrl(), location.href);
+        }
+        return this.toPreviewUrl();
+    }
+
+    /**
      * Format parsed fields for display in the landing page info section.
      * Branches are shown as `head (name)` to match the underlying raw route.
      * @returns {ParsedInfo}
@@ -310,7 +329,7 @@ async function autoPreview() {
     try {
         const link = GitHubLink.parse(value);
         await serviceWorkerReady;
-        location.replace(link.toPreviewUrl());
+        location.replace(link.toTargetUrl());
     } catch (error) {
         url.searchParams.delete("preview");
         history.replaceState(null, "", url);
@@ -345,7 +364,7 @@ form.addEventListener("submit", (event) => {
 
     try {
         const link = GitHubLink.parse(input.value.trim());
-        location.href = link.toPreviewUrl();
+        location.href = link.toTargetUrl();
     } catch (error) {
         alert(error instanceof Error ? error.message : String(error));
     }

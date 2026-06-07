@@ -1,13 +1,18 @@
 # GitHub-Preview
 
-Preview HTML files directly from GitHub without cloning. [No backend. No privacy concerns.](#how-it-works)
+Preview HTML and media files directly from GitHub without cloning. [No backend. No privacy concerns.](#how-it-works)
 
 ## 📖 Usage
 
 1. Visit [GitHub-Preview](https://pro-2684.github.io/GitHub-Preview/) once. (Registers [service worker](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorker))
-2. Paste the raw/blob link in the input box on the landing page and submit. Alternatively, replace `https://raw.githubusercontent.com/` with `https://pro-2684.github.io/GitHub-Preview/` and visit the URL.
+2. Paste the raw/blob link in the input box on the landing page and submit. HTML files open through the preview proxy; supported video and audio files open in a native media player. Alternatively, replace `https://raw.githubusercontent.com/` with `https://pro-2684.github.io/GitHub-Preview/` and visit the URL.
 
 Share links with `?url=...&preview=1` so the landing page can install the service worker before opening the preview.
+
+Media type is selected by extension:
+
+- Video: `webm`, `ogv`, `mkv`, `mp4`, `mov`
+- Audio: `mp3`, `flac`, `ogg`, `opus`, `wav`, `m4a`, `aac`
 
 Here's a few examples you can try:
 

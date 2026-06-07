@@ -1,7 +1,7 @@
 {
     "name": "GitHub Preview",
     "short_name": "GitHub Preview",
-    "description": "Preview HTML files directly from GitHub without cloning.",
+    "description": "Preview HTML and media files directly from GitHub without cloning.",
     "start_url": "./",
     "display": "standalone",
     "background_color": "#ffffff",

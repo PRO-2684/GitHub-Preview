@@ -1,8 +1,11 @@
-const APP_VERSION = "1778572208";
+const APP_VERSION = "1780831601";
 const CACHE_NAME = `github-preview-${APP_VERSION}`;
 const APP_RESOURCES = [
     "app.js",
+    "media.js",
     "index.html",
+    "player.html",
+    "player.js",
     "style.css",
     "favicon.svg",
     "manifest.json",
