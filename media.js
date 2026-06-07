@@ -87,27 +87,12 @@ function createGitHubRawUrl(path, search = "") {
     return url.href;
 }
 
-/**
- * Select the service-worker redirect target for a media request.
- * @param {string} path
- * @param {string} appBaseUrl
- * @param {string} search
- * @param {boolean} isNavigation
- * @returns {string | null}
- */
-function createMediaRedirectUrl(path, appBaseUrl, search, isNavigation) {
-    const mediaUrl = createGitHubRawUrl(path, search);
-    if (!mediaUrl) return null;
-    return isNavigation ? createPlayerUrl(mediaUrl, appBaseUrl) : mediaUrl;
-}
-
 const MediaPreview = {
     mediaExtensions,
     getMediaType,
     parseMediaUrl,
     createPlayerUrl,
     createGitHubRawUrl,
-    createMediaRedirectUrl,
 };
 
 if (typeof module !== "undefined") {

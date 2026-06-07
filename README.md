@@ -14,9 +14,7 @@ Media type is selected by extension:
 - Video: `webm`, `ogv`, `mkv`, `mp4`, `mov`
 - Audio: `mp3`, `flac`, `ogg`, `opus`, `wav`, `m4a`, `aac`
 
-Media uses GitHub's raw route so files stored with Git LFS resolve to their
-actual content. Direct navigation to a media preview path opens the player;
-media requested by a previewed page redirects directly to the raw content.
+Media uses GitHub's raw route so files stored with Git LFS resolve to their actual content. The landing page opens recognized media in the player. Direct preview paths and media requested by previewed pages redirect to raw content.
 
 Here's a few examples you can try:
 
