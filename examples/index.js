@@ -1,6 +1,6 @@
 setTimeout(() => {
     // Fetch (relative path)
-    fetch("./data.json")
+    fetch("./data/data.json")
         .then((response) => response.json())
         .then((data) => {
             document.getElementById("fetch-relative").textContent =
@@ -12,7 +12,7 @@ setTimeout(() => {
                 "🔴 Failed: " + error.message;
         });
     // Fetch (absolute path)
-    fetch("/data.json")
+    fetch("/data/data.json")
         .then((response) => response.json())
         .then((data) => {
             document.getElementById("fetch-absolute").textContent =
@@ -24,7 +24,7 @@ setTimeout(() => {
                 "🔴 Failed: " + error.message;
         });
     // Fetch (streaming)
-    fetch("./lorem.txt")
+    fetch("./data/lorem.txt")
         .then(async (response) => {
             if (!response.body) throw new Error("ReadableStream not supported");
 
@@ -61,7 +61,7 @@ setTimeout(() => {
                 "🔴 Failed: " + error.message;
         });
     // Fetch (HEAD)
-    fetch("./data.json", { method: "HEAD" })
+    fetch("./data/data.json", { method: "HEAD" })
         .then(async (response) => {
             const text = await response.text();
             if (text.length > 0) {
