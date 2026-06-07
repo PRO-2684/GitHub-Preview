@@ -1,4 +1,6 @@
-const APP_VERSION = "1780832257";
+importScripts("./media.js");
+
+const APP_VERSION = "1780832610";
 const CACHE_NAME = `github-preview-${APP_VERSION}`;
 const APP_RESOURCES = [
     "app.js",
@@ -89,6 +91,16 @@ async function handleSameOriginRequest(request, url) {
     }
 
     const [owner, repo, ...rest] = parts;
+    const mediaRedirectUrl = MediaPreview.createMediaRedirectUrl(
+        path,
+        `${ORIGIN}${PREFIX}`,
+        url.search,
+        request.mode === "navigate",
+    );
+    if (mediaRedirectUrl) {
+        return Response.redirect(mediaRedirectUrl, 302);
+    }
+
     const rawUrl = new URL(
         `https://raw.githubusercontent.com/${owner}/${repo}/${rest.join("/")}`,
     );

@@ -27,6 +27,12 @@ Automatic previews opened through `?url=...&preview=1` use the same dispatch
 logic as form submissions. Share links therefore retain their existing format
 and behavior.
 
+The service worker applies the same media classification to direct preview
+paths. Top-level media navigation redirects to `player.html`. Media requested
+as a subresource by a previewed page redirects directly to GitHub's raw route,
+so `<video>` and `<audio>` elements receive media bytes rather than the player
+document.
+
 ## Player Page
 
 `player.html` is a focused, standalone media document rather than an embedded
@@ -73,14 +79,11 @@ or codec fallback.
 - `player.js` validates the player query, classifies the media type, and creates
   the native media element.
 - `style.css` provides the shared player layout styles.
-- `sw.js` adds the player resources to the application cache but does not proxy
-  media playback.
+- `sw.js` loads the shared media rules, adds the player resources to the
+  application cache, and redirects recognized media instead of proxying it.
 
-The extension object is duplicated between `app.js` and `player.js` rather than
-introducing a module or changing the existing classic-script loading model.
-Both copies use the exact same literal and are covered by focused tests or
-manual verification. A shared module can be introduced later if more preview
-types make duplication material.
+`media.js` exposes one shared extension map and routing helpers to the landing
+page, player, service worker, and Node tests.
 
 ## Verification
 

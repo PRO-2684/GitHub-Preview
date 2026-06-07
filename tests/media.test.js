@@ -2,6 +2,8 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 
 const {
+    createGitHubRawUrl,
+    createMediaRedirectUrl,
     createPlayerUrl,
     getMediaType,
     parseMediaUrl,
@@ -71,6 +73,48 @@ test("creates an encoded player URL relative to the app", () => {
             "https://example.com/GitHub-Preview/",
         ),
         "https://example.com/GitHub-Preview/player.html?url=https%3A%2F%2Fraw.githubusercontent.com%2Fuser%2Frepo%2Fmain%2Fdemo.mp4%3Fraw%3D1",
+    );
+});
+
+test("creates an LFS-aware raw URL from a preview path", () => {
+    assert.equal(
+        createGitHubRawUrl(
+            "user/repo/refs/heads/main/media/demo.mp4",
+            "?download=1",
+        ),
+        "https://github.com/user/repo/raw/refs/heads/main/media/demo.mp4?download=1",
+    );
+});
+
+test("does not create raw URLs for unsupported preview paths", () => {
+    assert.equal(
+        createGitHubRawUrl("user/repo/refs/heads/main/index.html"),
+        null,
+    );
+    assert.equal(createGitHubRawUrl("invalid.mp4"), null);
+});
+
+test("redirects media navigation to the player", () => {
+    assert.equal(
+        createMediaRedirectUrl(
+            "user/repo/main/media/demo.mp4",
+            "https://example.com/GitHub-Preview/",
+            "?download=1",
+            true,
+        ),
+        "https://example.com/GitHub-Preview/player.html?url=https%3A%2F%2Fgithub.com%2Fuser%2Frepo%2Fraw%2Fmain%2Fmedia%2Fdemo.mp4%3Fdownload%3D1",
+    );
+});
+
+test("redirects media subresources directly to GitHub raw", () => {
+    assert.equal(
+        createMediaRedirectUrl(
+            "user/repo/main/media/demo.mp4",
+            "https://example.com/GitHub-Preview/",
+            "",
+            false,
+        ),
+        "https://github.com/user/repo/raw/main/media/demo.mp4",
     );
 });
 
