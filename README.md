@@ -24,6 +24,12 @@ Here's a few examples you can try:
 - [A Comprehensive Example](https://pro-2684.github.io/GitHub-Preview/?url=https%3A%2F%2Fraw.githubusercontent.com%2FPRO-2684%2FGitHub-Preview%2Frefs%2Fheads%2Fmain%2Fexamples%2Findex.html&preview=1)
     - [Blob](https://github.com/PRO-2684/GitHub-Preview/blob/main/examples/index.html)
     - [Raw](https://raw.githubusercontent.com/PRO-2684/GitHub-Preview/refs/heads/main/examples/index.html)
+- [Aria Math (`audio`)](https://pro-2684.github.io/GitHub-Preview/?url=https%3A%2F%2Fgithub.com%2FInventivetalentDev%2Fminecraft-assets%2Fblob%2F26.1.2%2Fassets%2Fminecraft%2Fsounds%2Fmusic%2Fgame%2Fcreative%2Faria_math.ogg&preview=1)
+    - [Blob](https://github.com/InventivetalentDev/minecraft-assets/blob/26.1.2/assets/minecraft/sounds/music/game/creative/aria_math.ogg)
+    - [Raw](https://raw.githubusercontent.com/InventivetalentDev/minecraft-assets/26.1.2/assets/minecraft/sounds/music/game/creative/aria_math.ogg)
+- [Blinding Lights (`video`)](https://pro-2684.github.io/GitHub-Preview/?url=https%3A%2F%2Fgithub.com%2FPRO-2684%2FGitHub-Preview%2Fblob%2Fmain%2Fexamples%2Fdata%2F4NRXx6U8ABQ.mp4&preview=1)
+    - [Blob](https://github.com/PRO-2684/GitHub-Preview/blob/main/examples/data/4NRXx6U8ABQ.mp4)
+    - [Raw](https://raw.githubusercontent.com/PRO-2684/GitHub-Preview/refs/heads/main/examples/data/4NRXx6U8ABQ.mp4)
 
 ## ⚙️ Integrations
 

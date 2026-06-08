@@ -128,6 +128,19 @@ body {
     text-align: left;
 }
 
+#usage {
+    display: flex;
+    flex-wrap: wrap;
+
+    > :not(.example) {
+        flex: 0 0 100%;
+    }
+
+    .example {
+        flex: 1 1 20rem;
+    }
+}
+
 details {
     /* Indent content */
     padding: 0 1em;
