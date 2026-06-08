@@ -3,8 +3,8 @@
 // @name:zh-CN   GitHub 预览 (UserScript)
 // @namespace    http://tampermonkey.net/
 // @version      0.1.2
-// @description  Adds a button on GitHub to preview HTML files directly.
-// @description:zh-CN 在 GitHub 上添加一个按钮，用于直接预览 HTML 文件。
+// @description  Adds a button on GitHub to preview HTML and media files directly.
+// @description:zh-CN 在 GitHub 上添加一个按钮，用于直接预览 HTML 和媒体文件。
 // @author       PRO-2684
 // @match        https://github.com/*
 // @run-at       document-start
