@@ -2,7 +2,7 @@
 // @name         GitHub Preview (UserScript)
 // @name:zh-CN   GitHub 预览 (UserScript)
 // @namespace    http://tampermonkey.net/
-// @version      0.1.1
+// @version      0.1.2
 // @description  Adds a button on GitHub to preview HTML files directly.
 // @description:zh-CN 在 GitHub 上添加一个按钮，用于直接预览 HTML 文件。
 // @author       PRO-2684
@@ -15,6 +15,25 @@
 
 (function () {
     "use strict";
+    const EXTENSIONS = new Set([
+        // HTML
+        "html",
+        "htm",
+        // Video per https://www.chromium.org/audio-video/
+        "webm",
+        "ogv",
+        "mkv",
+        "mp4",
+        "mov",
+        // Audio per https://www.chromium.org/audio-video/
+        "mp3",
+        "flac",
+        "ogg",
+        "opus",
+        "wav",
+        "m4a",
+        "aac",
+    ]);
     const PREVIEW_URL = new URL(
         "https://pro-2684.github.io/GitHub-Preview/?preview=1",
     );
@@ -94,11 +113,11 @@
             return;
         }
 
-        // Check if the file is an HTML file or if we've already added a preview button
+        // Check if the file has an accepted extension or if we've already added a preview button
         const rawUrl = new URL(anchorButton?.href);
         const extension = rawUrl.pathname.split(".").pop().toLowerCase();
         if (
-            !["html", "htm"].includes(extension) ||
+            !EXTENSIONS.has(extension) ||
             buttons.querySelector("a[data-testid='preview-button']")
         )
             return;
