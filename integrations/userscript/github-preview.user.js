@@ -180,7 +180,7 @@
                         "Failed to resolve URL. Check console.";
                 }
             }
-            previewButton.setAttribute("href", "#");
+            previewButton.setAttribute("href", "javascript:void(0)");
             previewButton.addEventListener("click", onClick);
         }
         // Insert the preview button and tooltip
