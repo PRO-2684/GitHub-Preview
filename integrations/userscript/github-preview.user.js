@@ -129,7 +129,21 @@
             // Copy attributes from the reference button
             previewButton.setAttribute(attr.name, attr.value);
         }
-        // Override specific attributes for the preview button
+        previewButton.setAttribute("data-testid", "preview-button");
+        previewButton.setAttribute("aria-labelledby", "preview-tooltip");
+        previewButton.setAttribute("interestfor", "preview-tooltip"); // https://developer.mozilla.org/en-US/docs/Web/API/Popover_API
+        previewButton.innerHTML = EYE_OCTICON;
+        // Create the tooltip element
+        const tooltip = document.createElement("div");
+        for (const attr of refTooltip.attributes) {
+            // Copy attributes from the reference tooltip
+            tooltip.setAttribute(attr.name, attr.value);
+        }
+        // Override specific attributes for the preview tooltip
+        tooltip.setAttribute("id", "preview-tooltip");
+        tooltip.textContent = "Preview this file";
+
+        // Click handling differs for public vs private repos due to authentication requirements for raw URLs
         if (isPublic()) {
             const previewUrl = new URL(PREVIEW_URL);
             previewUrl.searchParams.set("url", rawUrl.href);
@@ -149,6 +163,7 @@
                 setButtonEnabled(previewButton, true);
                 if (resolvedUrl) {
                     previewButton.removeEventListener("click", onClick);
+                    tooltip.textContent = "Preview this file";
                     const previewUrl = new URL(PREVIEW_URL);
                     previewUrl.searchParams.set("url", resolvedUrl);
                     previewButton.setAttribute("href", previewUrl.href);
@@ -161,27 +176,13 @@
                     });
                     previewButton.dispatchEvent(clickEvent);
                 } else {
-                    alert(
-                        "Failed to resolve the raw URL with authentication. See console for details.",
-                    );
+                    tooltip.textContent =
+                        "Failed to resolve URL. Check console.";
                 }
             }
             previewButton.setAttribute("href", "#");
             previewButton.addEventListener("click", onClick);
         }
-        previewButton.setAttribute("data-testid", "preview-button");
-        previewButton.setAttribute("aria-labelledby", "preview-tooltip");
-        previewButton.setAttribute("interestfor", "preview-tooltip"); // https://developer.mozilla.org/en-US/docs/Web/API/Popover_API
-        previewButton.innerHTML = EYE_OCTICON;
-        // Create the tooltip element
-        const tooltip = document.createElement("div");
-        for (const attr of refTooltip.attributes) {
-            // Copy attributes from the reference tooltip
-            tooltip.setAttribute(attr.name, attr.value);
-        }
-        // Override specific attributes for the preview tooltip
-        tooltip.setAttribute("id", "preview-tooltip");
-        tooltip.textContent = "Preview this file";
         // Insert the preview button and tooltip
         const container = document.createElement("div");
         container.append(previewButton, tooltip);
