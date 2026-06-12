@@ -15,6 +15,10 @@
 
 (function () {
     "use strict";
+    const { name } = GM_info.script;
+    const log = console.log.bind(console, `[${name}]`);
+    const warn = console.warn.bind(console, `[${name}]`);
+
     const EXTENSIONS = new Set([
         // HTML
         "html",
@@ -42,6 +46,7 @@
     const EYE_OCTICON = `<svg ${OCTICON_ATTRS}><path d="M8 2c1.981 0 3.671.992 4.933 2.078 1.27 1.091 2.187 2.345 2.637 3.023a1.62 1.62 0 0 1 0 1.798c-.45.678-1.367 1.932-2.637 3.023C11.67 13.008 9.981 14 8 14c-1.981 0-3.671-.992-4.933-2.078C1.797 10.83.88 9.576.43 8.898a1.62 1.62 0 0 1 0-1.798c.45-.677 1.367-1.931 2.637-3.022C4.33 2.992 6.019 2 8 2ZM1.679 7.932a.12.12 0 0 0 0 .136c.411.622 1.241 1.75 2.366 2.717C5.176 11.758 6.527 12.5 8 12.5c1.473 0 2.825-.742 3.955-1.715 1.124-.967 1.954-2.096 2.366-2.717a.12.12 0 0 0 0-.136c-.412-.621-1.242-1.75-2.366-2.717C10.824 4.242 9.473 3.5 8 3.5c-1.473 0-2.825.742-3.955 1.715-1.124.967-1.954 2.096-2.366 2.717ZM8 10a2 2 0 1 1-.001-3.999A2 2 0 0 1 8 10Z"></path></svg>`;
     const ANCHOR_BUTTON = "a[data-testid='raw-button']";
     const REFERENCE_BUTTON = "button[data-testid='copy-raw-button']";
+
     /**
      * Checks if the current repository is public.
      * @returns {boolean} True if the repository is public, false otherwise.
@@ -51,16 +56,14 @@
             `react-app[app-name="code-view"] > script[type="application/json"][data-target="react-app.embeddedData"]`,
         )?.textContent;
         if (!embeddedData) {
-            console.warn(
-                "Embedded data not found. Assuming repository is public.",
-            );
+            warn("Embedded data not found. Assuming repository is public.");
             return true;
         }
         try {
             const data = JSON.parse(embeddedData);
             return data?.payload?.codeViewLayoutRoute?.repo?.public ?? true;
         } catch (error) {
-            console.error("Failed to parse embedded data:", error);
+            warn("Failed to parse embedded data:", error);
             return true;
         }
     }
@@ -74,13 +77,13 @@
         return fetch(url.href, { method: "HEAD" })
             .then((response) => {
                 if (response.ok) {
-                    console.log(
+                    log(
                         "Successfully resolved raw URL with token:",
                         response.url,
                     );
                     return response.url;
                 } else {
-                    console.warn(
+                    warn(
                         "Failed to resolve raw URL with token.",
                         response.status,
                     );
@@ -88,7 +91,7 @@
                 }
             })
             .catch((error) => {
-                console.error("Error resolving raw URL with token:", error);
+                warn("Error resolving raw URL with token:", error);
                 return null;
             });
     }
@@ -101,7 +104,7 @@
     async function createPreviewButton(refButton, rawUrl) {
         const refTooltip = refButton.nextElementSibling;
         if (!refTooltip) {
-            console.warn(
+            warn(
                 "Reference tooltip not found. Skipping preview button insertion.",
             );
             return;
@@ -124,7 +127,7 @@
                 previewUrl.searchParams.set("url", authenticatedUrl);
                 previewButton.setAttribute("href", previewUrl.href);
             } else {
-                console.warn(
+                warn(
                     "Could not resolve authenticated raw URL. Preview button will not work.",
                 );
                 previewButton.setAttribute(
@@ -164,18 +167,19 @@
         tooltip.style.left = `${x - 41.7}px`;
         tooltip.style.top = `${y - 31.5}px`;
     }
+
     /**
      * Adds preview button if applicable.
      */
     async function githubPreview() {
-        console.log("Checking for preview button insertion...");
+        log("Checking for preview button insertion...");
         const buttons = document.querySelector(
             ".react-blob-header-edit-and-raw-actions",
         );
         const anchorButton = buttons?.querySelector(ANCHOR_BUTTON);
         const refButton = buttons?.querySelector(REFERENCE_BUTTON);
         if (!anchorButton || !refButton) {
-            console.warn(
+            warn(
                 "Required buttons not found. Skipping preview button insertion.",
             );
             return;
@@ -194,7 +198,7 @@
         if (!previewButton) return;
         anchorButton.parentElement.after(previewButton);
         fixTooltipPosition(previewButton);
-        console.log("Preview button inserted successfully.");
+        log("Preview button inserted successfully.");
     }
 
     document.addEventListener("soft-nav:react-done", githubPreview);
