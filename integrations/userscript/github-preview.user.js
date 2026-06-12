@@ -68,6 +68,21 @@
         }
     }
     /**
+     * Enables or disables a button element.
+     * @param {HTMLButtonElement | HTMLAnchorElement} button - The button element to enable or disable.
+     * @param {boolean} enabled - True to enable the button, false to disable it.
+     */
+    function setButtonEnabled(button, enabled) {
+        button.disabled = !enabled;
+        button.ariaDisabled = String(!enabled);
+        button.ariaBusy = String(!enabled);
+        if (!enabled) {
+            button.style.cursor = "wait";
+        } else {
+            button.style.cursor = "";
+        }
+    }
+    /**
      * Resolves the raw URL with an authentication token.
      * @param {URL} rawUrl - The original raw URL of the file.
      * @returns {Promise<string | null>} A promise that resolves to the authenticated raw URL.
@@ -99,9 +114,9 @@
      * Create a "Preview" button.
      * @param {HTMLLinkElement | null} refButton - The reference button.
      * @param {URL} rawUrl - The GitHub raw URL of the file.
-     * @returns {Promise<HTMLDivElement | null>} The container element with the preview button and tooltip, or null if creation failed.
+     * @returns {HTMLDivElement | null} The container element with the preview button and tooltip, or null if creation failed.
      */
-    async function createPreviewButton(refButton, rawUrl) {
+    function createPreviewButton(refButton, rawUrl) {
         const refTooltip = refButton.nextElementSibling;
         if (!refTooltip) {
             warn(
@@ -120,21 +135,39 @@
             previewUrl.searchParams.set("url", rawUrl.href);
             previewButton.setAttribute("href", previewUrl.href);
         } else {
-            // For private repositories, we need to resolve the raw URL with an authentication token
-            const authenticatedUrl = await resolveRawWithToken(rawUrl);
-            if (authenticatedUrl) {
-                const previewUrl = new URL(PREVIEW_URL);
-                previewUrl.searchParams.set("url", authenticatedUrl);
-                previewButton.setAttribute("href", previewUrl.href);
-            } else {
-                warn(
-                    "Could not resolve authenticated raw URL. Preview button will not work.",
-                );
-                previewButton.setAttribute(
-                    "href",
-                    "https://github.com/PRO-2684/GitHub-Preview#-usage",
-                );
+            /**
+             * Handles the click event on the preview button.
+             * @param {PointerEvent} event - The click event object.
+             */
+            async function onClick(event) {
+                event.preventDefault();
+                // Prevent multiple clicks while resolving the URL
+                if (previewButton.disabled) return;
+                setButtonEnabled(previewButton, false);
+                log("Resolving raw URL with authentication token...");
+                const resolvedUrl = await resolveRawWithToken(rawUrl);
+                setButtonEnabled(previewButton, true);
+                if (resolvedUrl) {
+                    previewButton.removeEventListener("click", onClick);
+                    const previewUrl = new URL(PREVIEW_URL);
+                    previewUrl.searchParams.set("url", resolvedUrl);
+                    previewButton.setAttribute("href", previewUrl.href);
+                    // Simulate the click again with same modifiers
+                    const clickEvent = new MouseEvent("click", {
+                        ctrlKey: event.ctrlKey,
+                        shiftKey: event.shiftKey,
+                        altKey: event.altKey,
+                        metaKey: event.metaKey,
+                    });
+                    previewButton.dispatchEvent(clickEvent);
+                } else {
+                    alert(
+                        "Failed to resolve the raw URL with authentication. See console for details.",
+                    );
+                }
             }
+            previewButton.setAttribute("href", "#");
+            previewButton.addEventListener("click", onClick);
         }
         previewButton.setAttribute("data-testid", "preview-button");
         previewButton.setAttribute("aria-labelledby", "preview-tooltip");
@@ -171,7 +204,7 @@
     /**
      * Adds preview button if applicable.
      */
-    async function githubPreview() {
+    function githubPreview() {
         log("Checking for preview button insertion...");
         const buttons = document.querySelector(
             ".react-blob-header-edit-and-raw-actions",
@@ -194,7 +227,7 @@
         )
             return;
 
-        const previewButton = await createPreviewButton(refButton, rawUrl);
+        const previewButton = createPreviewButton(refButton, rawUrl);
         if (!previewButton) return;
         anchorButton.parentElement.after(previewButton);
         fixTooltipPosition(previewButton);
