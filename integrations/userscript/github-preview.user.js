@@ -2,7 +2,7 @@
 // @name         GitHub Preview (UserScript)
 // @name:zh-CN   GitHub 预览 (UserScript)
 // @namespace    http://tampermonkey.net/
-// @version      0.1.2
+// @version      0.1.3
 // @description  Adds a button on GitHub to preview HTML and media files directly.
 // @description:zh-CN 在 GitHub 上添加一个按钮，用于直接预览 HTML 和媒体文件。
 // @author       PRO-2684
@@ -43,12 +43,62 @@
     const ANCHOR_BUTTON = "a[data-testid='raw-button']";
     const REFERENCE_BUTTON = "button[data-testid='copy-raw-button']";
     /**
+     * Checks if the current repository is public.
+     * @returns {boolean} True if the repository is public, false otherwise.
+     */
+    function isPublic() {
+        const embeddedData = document.querySelector(
+            `react-app[app-name="code-view"] > script[type="application/json"][data-target="react-app.embeddedData"]`,
+        )?.textContent;
+        if (!embeddedData) {
+            console.warn(
+                "Embedded data not found. Assuming repository is public.",
+            );
+            return true;
+        }
+        try {
+            const data = JSON.parse(embeddedData);
+            return data?.payload?.codeViewLayoutRoute?.repo?.public ?? true;
+        } catch (error) {
+            console.error("Failed to parse embedded data:", error);
+            return true;
+        }
+    }
+    /**
+     * Resolves the raw URL with an authentication token.
+     * @param {URL} rawUrl - The original raw URL of the file.
+     * @returns {Promise<string | null>} A promise that resolves to the authenticated raw URL.
+     */
+    async function resolveRawWithToken(url) {
+        // Perform a HEAD request and return the redirected URL
+        return fetch(url.href, { method: "HEAD" })
+            .then((response) => {
+                if (response.ok) {
+                    console.log(
+                        "Successfully resolved raw URL with token:",
+                        response.url,
+                    );
+                    return response.url;
+                } else {
+                    console.warn(
+                        "Failed to resolve raw URL with token.",
+                        response.status,
+                    );
+                    return null;
+                }
+            })
+            .catch((error) => {
+                console.error("Error resolving raw URL with token:", error);
+                return null;
+            });
+    }
+    /**
      * Create a "Preview" button.
      * @param {HTMLLinkElement | null} refButton - The reference button.
      * @param {URL} rawUrl - The GitHub raw URL of the file.
-     * @returns {HTMLDivElement | null} The container element with the preview button and tooltip, or null if creation failed.
+     * @returns {Promise<HTMLDivElement | null>} The container element with the preview button and tooltip, or null if creation failed.
      */
-    function createPreviewButton(refButton, rawUrl) {
+    async function createPreviewButton(refButton, rawUrl) {
         const refTooltip = refButton.nextElementSibling;
         if (!refTooltip) {
             console.warn(
@@ -62,9 +112,27 @@
             previewButton.setAttribute(attr.name, attr.value);
         }
         // Override specific attributes for the preview button
-        const previewUrl = new URL(PREVIEW_URL);
-        previewUrl.searchParams.set("url", rawUrl.href);
-        previewButton.setAttribute("href", previewUrl.href);
+        if (isPublic()) {
+            const previewUrl = new URL(PREVIEW_URL);
+            previewUrl.searchParams.set("url", rawUrl.href);
+            previewButton.setAttribute("href", previewUrl.href);
+        } else {
+            // For private repositories, we need to resolve the raw URL with an authentication token
+            const authenticatedUrl = await resolveRawWithToken(rawUrl);
+            if (authenticatedUrl) {
+                const previewUrl = new URL(PREVIEW_URL);
+                previewUrl.searchParams.set("url", authenticatedUrl);
+                previewButton.setAttribute("href", previewUrl.href);
+            } else {
+                console.warn(
+                    "Could not resolve authenticated raw URL. Preview button will not work.",
+                );
+                previewButton.setAttribute(
+                    "href",
+                    "https://github.com/PRO-2684/GitHub-Preview#-usage",
+                );
+            }
+        }
         previewButton.setAttribute("data-testid", "preview-button");
         previewButton.setAttribute("aria-labelledby", "preview-tooltip");
         previewButton.setAttribute("interestfor", "preview-tooltip"); // https://developer.mozilla.org/en-US/docs/Web/API/Popover_API
@@ -99,7 +167,7 @@
     /**
      * Adds preview button if applicable.
      */
-    function githubPreview() {
+    async function githubPreview() {
         console.log("Checking for preview button insertion...");
         const buttons = document.querySelector(
             ".react-blob-header-edit-and-raw-actions",
@@ -122,7 +190,7 @@
         )
             return;
 
-        const previewButton = createPreviewButton(refButton, rawUrl);
+        const previewButton = await createPreviewButton(refButton, rawUrl);
         if (!previewButton) return;
         anchorButton.parentElement.after(previewButton);
         fixTooltipPosition(previewButton);

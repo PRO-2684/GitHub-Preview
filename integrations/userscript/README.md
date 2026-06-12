@@ -10,3 +10,7 @@ Adds a button on GitHub to preview HTML and media files directly. Uses [GitHub P
 
 - Event-driven: Faster and more efficient than mutation observers. Less error-prone than monkey-patching.
 - Seamless: Reuses GitHub's design language and icon. Blends in perfectly with the UI.
+
+## 🔒 Private Repos
+
+This script works on private repositories as well, as long as you have access to the files. To do that, this script simply issues a `HEAD` request to the raw file URL, follows the redirect, and use the final URL which would include a `token`.
