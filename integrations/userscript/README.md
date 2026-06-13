@@ -13,4 +13,4 @@ Adds a button on GitHub to preview HTML and media files directly. Uses [GitHub P
 
 ## 🔒 Private Repos
 
-This script works on private repositories as well, as long as you have access to the files. To do that, this script simply issues a `HEAD` request to the raw file URL, follows the redirect, and use the final URL which would include a `token`.
+This script works on private repositories as well, as long as you have access to the files. To do that, this script simply issues a `HEAD` request to the raw file URL, follows the redirect, and use the final URL which would include a `token`. However, HTML files referencing other files (e.g. CSS, JS) may not work properly due to the lack of `token` in their URLs.
