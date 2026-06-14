@@ -22,12 +22,13 @@
  * @returns {Promise<void>}
  */
 async function registerSW() {
-    if ("serviceWorker" in navigator) {
-        await navigator.serviceWorker.register("./sw.js", {
-            scope: "./",
-        });
-        await navigator.serviceWorker.ready;
-    }
+    if (!("serviceWorker" in navigator))
+        throw new Error("Service workers are not supported");
+
+    await navigator.serviceWorker.register("./sw.js", {
+        scope: "./",
+    });
+    await navigator.serviceWorker.ready;
 }
 
 const serviceWorkerReady = registerSW();
@@ -256,6 +257,8 @@ const input = document.getElementById("url");
 /** @type {HTMLFormElement} */
 const form = document.getElementById("preview-form");
 /** @type {HTMLButtonElement} */
+const preview = document.getElementById("preview");
+/** @type {HTMLButtonElement} */
 const share = document.getElementById("share");
 /** @type {HTMLElement} */
 const usage = document.getElementById("usage");
@@ -265,6 +268,16 @@ const infoRepo = document.getElementById("info-repo");
 const infoPath = document.getElementById("info-path");
 /** @type {HTMLElement} */
 const infoRef = document.getElementById("info-ref");
+
+serviceWorkerReady.then(
+    () => {
+        preview.disabled = false;
+        preview.textContent = "Preview";
+    },
+    () => {
+        preview.textContent = "Error";
+    },
+);
 
 /**
  * Render parsed info for the current input value.
