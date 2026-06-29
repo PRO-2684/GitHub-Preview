@@ -54,18 +54,19 @@ Key differences between this project and other popular solutions:
 
 Detailed feature comparison:
 
-| Feature                                       | This project           | [raw.githack.com](https://raw.githack.com/) | [htmlpreview](https://htmlpreview.github.io/) |
-| --------------------------------------------- | ---------------------- | ------------------------------------------- | --------------------------------------------- |
-| Architecture                                  | Client-side            | Server-side                                 | Client + Server                               |
-| Mechanism                                     | Service Worker         | Server Proxy                                | HTML rewrite + optional proxy fallback        |
-| Backend-free                                  | 🟢                     | 🔴                                          | 🟡 (proxy fallback)                           |
-| Fix `Content-Type`                            | 🟢                     | 🟢                                          | 🟢                                            |
-| Static assets (`<img>`, `<script>`, `<link>`) | 🟢                     | 🟢                                          | 🟢                                            |
-| Runtime requests (`fetch`, XHR)               | 🟢                     | 🟢                                          | 🟡 (`<base>`)                                 |
-| Dynamic resources                             | 🟢                     | 🟢                                          | 🔴                                            |
-| Relative path handling                        | 🟢 (request remapping) | 🟢                                          | 🟢 (`<base>`)                                 |
-| Absolute path handling                        | 🔴                     | 🔴                                          | 🔴                                            |
-| Service Worker on target                      | 🔴                     | 🟢                                          | 🔴                                            |
+| Feature                                       | This project           | [raw.githack.com](https://raw.githack.com/) | [htmlpreview](https://htmlpreview.github.io/) | Ideal raw[^1] |
+| --------------------------------------------- | ---------------------- | ------------------------------------------- | --------------------------------------------- | ------------- |
+| Architecture                                  | Client-side            | Server-side                                 | Client + Server                               | N/A           |
+| Mechanism                                     | Service Worker         | Server Proxy                                | HTML rewrite + optional proxy fallback        | N/A           |
+| Backend-free                                  | 🟢                     | 🔴                                          | 🟡 (proxy fallback)                           | N/A           |
+| Static assets (`<img>`, `<script>`, `<link>`) | 🟢                     | 🟢                                          | 🟢                                            | 🟢            |
+| Runtime requests (`fetch`, XHR)               | 🟢                     | 🟢                                          | 🟡 (`<base>`)                                 | 🟢            |
+| Dynamic resources                             | 🟢                     | 🟢                                          | 🔴                                            | 🟢            |
+| Relative path handling                        | 🟢 (request remapping) | 🟢                                          | 🟢 (`<base>`)                                 | 🟢            |
+| Absolute path handling                        | 🔴                     | 🔴                                          | 🔴                                            | 🔴            |
+| Service Worker on target                      | 🔴                     | 🟢                                          | 🔴                                            | 🟢            |
+
+To summarize, this project achieves a very good approximation towards an ideal `raw.githubusercontent.com`[^1], without a proxy backend.
 
 ## 🕳️ Caveats
 
@@ -82,3 +83,5 @@ Detailed feature comparison:
 ## ✅ TODO
 
 - [x] Asset caching and offline support for this app
+
+[^1]: Assuming that `raw.githubusercontent.com` would return correct `Content-Type`.
