@@ -36,8 +36,8 @@ This project uses a Service Worker as a client-side proxy:
 1. Requests under `GitHub-Preview/...` are intercepted by the Service Worker.
 2. The path is mapped to `raw.githubusercontent.com/...`.
 3. The Service Worker fetches the original content.
-4. It fixes `Content-Type` (e.g. `text/plain` → `text/html`)
-5. Returns the modified response to the browser.
+4. It fixes `Content-Type` header (e.g. `text/plain` → `text/html`)
+5. Streams the modified response to the browser.
 
 Because all requests (including those triggered by scripts like `fetch("./data.json")`) go through the Service Worker, runtime resource loading works transparently.
 
